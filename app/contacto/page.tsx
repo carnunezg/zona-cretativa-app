@@ -12,7 +12,7 @@ export default function ContactoPage() {
 
       <a
         href="https://wa.me/56949034475"
-        className="inline-flex items-center gap-2 bg-green-500 text-white px-6 py-3 rounded-xl"
+        className="inline-flex items-center gap-2 bg-green-500 hover:bg-green-400 text-white px-6 py-3 rounded-xl"
       >
         <FaWhatsapp /> WhatsApp
       </a>

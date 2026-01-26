@@ -2,7 +2,7 @@ import { FaFacebook, FaInstagram, FaEnvelope } from "react-icons/fa6";
 
 export default function Footer() {
   return (
-    <footer className="bg-blue-200 py-6 text-center">
+    <footer className="bg-blue/100 py-6 text-center">
       <div className="flex justify-center gap-6 text-2xl mb-3">
         <a
           href="https://www.facebook.com/zonacreativapf"

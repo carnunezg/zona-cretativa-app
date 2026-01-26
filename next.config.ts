@@ -1,8 +1,9 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  output: "export", // Genera HTML estático
-  trailingSlash: true, // Para Netlify, crea /index.html en cada ruta
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  output: "export", // si quieres seguir con export estático
+  images: {
+    unoptimized: true, // DESACTIVA la optimización
+  },
 };
 
 export default nextConfig;

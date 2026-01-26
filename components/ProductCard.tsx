@@ -45,7 +45,7 @@ export default function ProductCard({ product }: Props) {
             `Hola, quiero reservar: ${product.name}`,
           )}`}
           target="_blank"
-          className="w-full inline-flex items-center justify-center gap-2 bg-green-400 hover:bg-green-500 text-white py-2 rounded-xl"
+          className="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white py-2 rounded-xl"
         >
           <FaWhatsapp /> Reservar
         </a>

@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function ComboCard({ pack }: Props) {
-  const whatsappMessage = `Hola, quiero información del ${pack.title} 🎉`;
+  const whatsappMessage = `Hola, quiero reservar: ${pack.title} 🎉`;
 
   return (
     <div
@@ -27,7 +27,7 @@ export default function ComboCard({ pack }: Props) {
         <a
           href={`https://wa.me/56949034475?text=${encodeURIComponent(whatsappMessage)}`}
           target="_blank"
-          className="w-full inline-flex items-center justify-center gap-2 bg-green-400 hover:bg-green-500 text-white py-2 rounded-xl"
+          className="w-full inline-flex items-center justify-center gap-2 bg-green-500 hover:bg-green-400 text-white py-2 rounded-xl"
         >
           <FaWhatsapp /> Reservar Pack
         </a>

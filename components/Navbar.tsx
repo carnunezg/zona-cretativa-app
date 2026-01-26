@@ -18,7 +18,7 @@ export default function Navbar() {
     `;
 
   return (
-    <nav className="bg-blue-200 px-6 py-4">
+    <nav className="bg-blue/100 px-6 py-4">
       <div className="flex items-center justify-between">
         <Link href="/">
           <Image
@@ -40,11 +40,13 @@ export default function Navbar() {
           <Link href="/packs" className={linkClass("/packs")}>
             Packs
           </Link>
-          <Link href="/contacto" className={linkClass("/contacto")}>
-            Contacto
+          <Link
+            href="/contacto"
+            className={`${linkClass("/contacto")} flex items-center gap-2`}
+          >
+            <span>Contacto</span>
+            <FaWhatsapp className="text-green-500 text-xl" />
           </Link>
-
-          <FaWhatsapp className="text-green-500 text-2xl cursor-pointer hover:scale-110 transition" />
         </div>
 
         <button
