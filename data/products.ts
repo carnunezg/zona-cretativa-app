@@ -25,7 +25,7 @@ export const products: Product[] = [
   {
     id: 4,
     name: "Pony Saltarín",
-    price: "3.000",
+    price: "3.000 C/U",
     dimensions: "185cm Largo X 30cm Ancho X 50cm Alto",
     image: "/images/PONYS.png",
   },
