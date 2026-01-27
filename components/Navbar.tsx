@@ -71,7 +71,7 @@ export default function Navbar() {
             className={`
       fixed top-0 right-0
       w-72
-      bg-white/80 backdrop-blur-md
+      bg-white/90 backdrop-blur-md
       rounded-2xl
       shadow-xl
       p-6 pt-15 space-y-3

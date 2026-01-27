@@ -12,7 +12,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="w-full flex justify-center pt-20 sm:pt-16 md:pt-12">
+    <section className="w-full flex justify-center pt-30 sm:pt-16 md:pt-12">
       <div
         className={`
           relative w-[340px] sm:w-[420px] md:w-[520px] lg:w-[620px]
