@@ -12,13 +12,13 @@ export default function Navbar() {
 
   const linkClass = (path: string) =>
     `
-      block px-4 py-2 rounded-lg font-medium transition
-      hover:bg-blue-300 hover:text-blue-900
-      ${pathname === path ? "bg-blue-400 text-blue-900" : "text-gray-800"}
-    `;
+    block px-4 py-2 rounded-lg font-medium transition
+    hover:bg-fuchsia-200 hover:text-fuchsia-900
+    ${pathname === path ? "bg-fuchsia-500 text-white" : "text-gray-900"}
+  `;
 
   return (
-    <nav className="bg-blue/100 px-6 py-4">
+    <nav className="sticky top-0 z-40 bg-white/10 backdrop-blur-md border-b border-white/10 shadow-sm px-6 py-4">
       <div className="flex items-center justify-between">
         <Link href="/">
           <Image
@@ -58,13 +58,30 @@ export default function Navbar() {
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-50 md:hidden">
+        <div className="fixed inset-0 z-50 md:hidden pointer-events-none">
           <div
-            className="absolute inset-0 bg-black/30"
             onClick={() => setOpen(false)}
+            className={`
+      absolute inset-0 bg-black/30 transition-opacity duration-500
+      ${open ? "opacity-100 pointer-events-auto" : "opacity-0"}
+    `}
           />
 
-          <div className="absolute top-0 right-0 w-72 h-full bg-white/40 backdrop-blur-sm p-6 pt-14 space-y-3 shadow-lg">
+          <div
+            className={`
+      fixed top-0 right-0
+      w-72
+      bg-white/80 backdrop-blur-md
+      rounded-2xl
+      shadow-xl
+      p-6 pt-15 space-y-3
+
+      transform transition-all duration-300 ease-out
+      ${open ? "translate-x-0 opacity-100" : "translate-x-8 opacity-0"}
+
+      pointer-events-auto
+    `}
+          >
             <button
               onClick={() => setOpen(false)}
               className="absolute top-4 right-4 text-2xl text-gray-900 hover:scale-110 transition"
