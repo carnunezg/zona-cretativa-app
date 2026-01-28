@@ -37,7 +37,7 @@ export default function ProductCard({ product }: Props) {
 
       <div className="mt-4 flex flex-col gap-3">
         <div className="bg-fuchsia-500 text-white font-bold text-lg text-center py-2 w-full rounded-xl">
-          Precio: ${product.price}
+          CLP ${product.price}
         </div>
 
         <a

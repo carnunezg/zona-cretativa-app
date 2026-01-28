@@ -3,4 +3,6 @@ export interface Pack {
   title: string;
   description: string;
   price: string;
+  image: string;
+  oldPrice: string;
 }

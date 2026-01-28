@@ -3,6 +3,9 @@ import { FaFacebook, FaInstagram, FaEnvelope } from "react-icons/fa6";
 export default function Footer() {
   return (
     <footer className="sticky top-0 bg-white/10 backdrop-blur-md border-b border-white/10 shadow-sm py-6 text-center">
+      <p className="text-xs sm:text-sm text-gray-900 mb-2">
+        Síguenos en nuestras redes
+      </p>
       <div className="flex justify-center gap-6 text-2xl mb-3">
         <a
           href="https://www.facebook.com/zonacreativapf"

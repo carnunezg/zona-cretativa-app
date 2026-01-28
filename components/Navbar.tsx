@@ -2,7 +2,14 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaWhatsapp, FaBars, FaXmark } from "react-icons/fa6";
+import {
+  FaWhatsapp,
+  FaBars,
+  FaXmark,
+  FaHouse,
+  FaBoxOpen,
+  FaTags,
+} from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 
@@ -22,49 +29,63 @@ export default function Navbar() {
       <div className="flex items-center justify-between">
         <Link href="/">
           <Image
-            src="/images/ZONA CREATIVA.png"
+            src="/images/logozc.png"
             alt="Logo Zona Creativa"
-            width={120}
-            height={60}
-            className="object-contain"
+            width={300}
+            height={120}
+            priority
+            className="h-14 sm:h-16 w-auto"
           />
         </Link>
 
         <div className="hidden md:flex items-center gap-4">
-          <Link href="/" className={linkClass("/")}>
-            Inicio
+          <Link
+            href="/"
+            className={`${linkClass("/")} flex items-center gap-2`}
+          >
+            <FaHouse className="text-lg opacity-80" />
+            <span>Inicio</span>
           </Link>
-          <Link href="/productos" className={linkClass("/productos")}>
-            Productos
+
+          <Link
+            href="/productos"
+            className={`${linkClass("/productos")} flex items-center gap-2`}
+          >
+            <FaBoxOpen className="text-lg opacity-80" />
+            <span>Productos</span>
           </Link>
-          <Link href="/packs" className={linkClass("/packs")}>
-            Packs
+
+          <Link
+            href="/packs"
+            className={`${linkClass("/packs")} flex items-center gap-2`}
+          >
+            <FaTags className="text-lg opacity-80" />
+            <span>Packs</span>
           </Link>
+
           <Link
             href="/contacto"
             className={`${linkClass("/contacto")} flex items-center gap-2`}
           >
+            <FaWhatsapp />
             <span>Contacto</span>
-            <FaWhatsapp className="text-green-500 text-xl" />
           </Link>
         </div>
 
         <button
           className="md:hidden text-2xl text-gray-800"
           onClick={() => setOpen(!open)}
+          aria-label="Abrir menú"
         >
           {open ? <FaXmark /> : <FaBars />}
         </button>
       </div>
 
       {open && (
-        <div className="fixed inset-0 z-50 md:hidden pointer-events-none">
+        <div className="fixed inset-0 z-50 md:hidden">
           <div
             onClick={() => setOpen(false)}
-            className={`
-      absolute inset-0 bg-black/30 transition-opacity duration-500
-      ${open ? "opacity-100 pointer-events-auto" : "opacity-0"}
-    `}
+            className="absolute inset-0 bg-black/30"
           />
 
           <div
@@ -84,7 +105,7 @@ export default function Navbar() {
           >
             <button
               onClick={() => setOpen(false)}
-              className="absolute top-4 right-4 text-2xl text-gray-900 hover:scale-110 transition"
+              className="absolute top-4 right-4 text-2xl text-gray-900"
               aria-label="Cerrar menú"
             >
               <FaXmark />
@@ -92,35 +113,38 @@ export default function Navbar() {
 
             <Link
               href="/"
-              className={linkClass("/")}
+              className={`${linkClass("/")} flex items-center gap-3`}
               onClick={() => setOpen(false)}
             >
+              <FaHouse />
               Inicio
             </Link>
 
             <Link
               href="/productos"
-              className={linkClass("/productos")}
+              className={`${linkClass("/productos")} flex items-center gap-3`}
               onClick={() => setOpen(false)}
             >
+              <FaBoxOpen />
               Productos
             </Link>
 
             <Link
               href="/packs"
-              className={linkClass("/packs")}
+              className={`${linkClass("/packs")} flex items-center gap-3`}
               onClick={() => setOpen(false)}
             >
+              <FaTags />
               Packs
             </Link>
 
             <Link
               href="/contacto"
-              className={`${linkClass("/contacto")} flex items-center gap-2`}
+              className={`${linkClass("/contacto")} flex items-center gap-3`}
               onClick={() => setOpen(false)}
             >
-              <span>Contacto</span>
-              <FaWhatsapp className="text-green-500 text-xl" />
+              <FaWhatsapp />
+              Contacto
             </Link>
           </div>
         </div>

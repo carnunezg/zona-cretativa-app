@@ -13,20 +13,14 @@ export default function Hero() {
 
   return (
     <section className="w-full flex justify-center pt-35 sm:pt-16 md:pt-12">
-      <div
-        className={`
-          relative w-[340px] sm:w-[420px] md:w-[520px] lg:w-[620px]
-          transition-transform duration-1000 ease-out
-          ${animate ? "rotate-[360deg]" : "rotate-0"}
-        `}
-      >
+      <div>
         <Image
-          src="/images/ZONA CREATIVA.png"
+          src="/images/zona creativa sf.png"
           alt="Zona Creativa"
           width={900}
           height={650}
           priority
-          className="mx-auto"
+          className="mx-auto contrast-125 saturate-110 brightness-105"
         />
       </div>
     </section>
