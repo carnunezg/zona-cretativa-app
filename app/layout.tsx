@@ -33,7 +33,7 @@ export default function RootLayout({
       <body className="relative min-h-screen">
         <div className="fixed inset-0 -z-10 pointer-events-none">
           <Image
-            src="/images/NIÑO CON PELOTAS.jpg"
+            src="/images/fondoamanda.jpeg"
             alt="Niño con pelotas"
             fill
             priority
