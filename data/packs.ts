@@ -8,7 +8,7 @@ export const packs: Pack[] = [
       "Castillo Inflable + Piscina de Pelotas + Resbalín + 2 Ponys Saltarín",
     oldPrice: "51.000",
     price: "40.000",
-    image: "/images/pack 1 completo.jpeg",
+    image: "/images/pack 1 completo.webp",
   },
   {
     id: 2,
@@ -16,7 +16,7 @@ export const packs: Pack[] = [
     description: "Piscina de Pelotas + Resbalín + 2 Ponys Saltarín",
     oldPrice: "31.000",
     price: "25.000",
-    image: "/images/pack 2 piscina.png",
+    image: "/images/pack 2 piscina.webp",
   },
   {
     id: 3,
@@ -24,6 +24,6 @@ export const packs: Pack[] = [
     description: "Castillo Inflable + Resbalín + 2 Ponys Saltarín",
     oldPrice: "31.000",
     price: "25.000",
-    image: "/images/pack 3 castillo.png",
+    image: "/images/pack 3 castillo.webp",
   },
 ];
