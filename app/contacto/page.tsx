@@ -4,11 +4,10 @@ export default function ContactoPage() {
   return (
     <section
       className="
-  min-h-screen
-  flex justify-center items-start
-  pt-20 sm:pt-24
-  px-4 sm:px-10
-"
+        flex-1
+        flex justify-center items-center
+        px-4 sm:px-10
+      "
     >
       <div
         className="
@@ -22,12 +21,15 @@ export default function ContactoPage() {
       >
         <h1 className="text-3xl font-bold mb-4 text-fuchsia-700">Contacto</h1>
 
-        <p className="mb-5 text-sm text-gray-1000">
-          Si quieres más información sobre nuestros productos, escríbenos.
+        <p className="mb-6 text-gray-700">
+          Si tienes dudas o necesitas más información sobre nuestros productos,
+          escríbenos por WhatsApp y te responderemos al instante.
         </p>
 
         <a
           href="https://wa.me/56949034475"
+          target="_blank"
+          rel="noopener noreferrer"
           className="
             inline-flex items-center gap-2
             bg-green-500 hover:bg-green-400
@@ -37,7 +39,7 @@ export default function ContactoPage() {
           "
         >
           <FaWhatsapp className="text-xl" />
-          WhatsApp
+          Contactar por WhatsApp
         </a>
       </div>
     </section>

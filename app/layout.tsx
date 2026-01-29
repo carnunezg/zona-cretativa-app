@@ -30,19 +30,27 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es">
-      <body className="relative min-h-screen">
+      <body className="relative min-h-dvh flex flex-col">
         <div className="fixed inset-0 -z-10 pointer-events-none">
           <Image
             src="/images/fondoamanda.webp"
             alt="Niño con pelotas"
             fill
             priority
-            className="object-cover opacity-40"
+            quality={100}
+            className="
+    object-cover
+    brightness-100
+    contrast-70
+    saturate-105
+  "
           />
         </div>
 
         <Navbar />
-        <main className="min-h-screen pt-10 pb-20">{children}</main>
+
+        <main className="flex-1 flex flex-col">{children}</main>
+
         <Footer />
       </body>
     </html>
