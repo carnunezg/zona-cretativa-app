@@ -9,6 +9,8 @@ import {
   FaHouse,
   FaBoxOpen,
   FaTags,
+  FaFileContract,
+  FaHouseCircleCheck,
 } from "react-icons/fa6";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -61,6 +63,22 @@ export default function Navbar() {
           >
             <FaTags className="text-lg opacity-80" />
             <span>Packs</span>
+          </Link>
+
+          <Link
+            href="/terminos"
+            className={`${linkClass("/terminos")} flex items-center gap-2`}
+          >
+            <FaFileContract className="text-lg opacity-80" />
+            <span>Términos</span>
+          </Link>
+
+          <Link
+            href="/condiciones"
+            className={`${linkClass("/condiciones")} flex items-center gap-2`}
+          >
+            <FaHouseCircleCheck className="text-lg opacity-80" />
+            <span>Condiciones</span>
           </Link>
 
           <Link
@@ -137,7 +155,23 @@ export default function Navbar() {
               <FaTags />
               Packs
             </Link>
+            <Link
+              href="/terminos"
+              className={`${linkClass("/terminos")} flex items-center gap-3`}
+              onClick={() => setOpen(false)}
+            >
+              <FaFileContract className="text-lg" />
+              Términos y Condiciones
+            </Link>
 
+            <Link
+              href="/condiciones"
+              className={`${linkClass("/condiciones")} flex items-center gap-3`}
+              onClick={() => setOpen(false)}
+            >
+              <FaHouseCircleCheck className="text-lg" />
+              Condiciones del Espacio
+            </Link>
             <Link
               href="/contacto"
               className={`${linkClass("/contacto")} flex items-center gap-3`}
