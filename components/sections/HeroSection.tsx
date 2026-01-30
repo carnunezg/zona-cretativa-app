@@ -7,14 +7,15 @@ export default function HeroSection() {
     <section
       id="inicio"
       className="
-    relative
-    min-h-[100svh]
-    md:h-[75vh]
-    lg:h-[80vh]
-    pt-28 sm:pt-32
-    overflow-hidden
-    -mb-20 sm:-mb-24
-  "
+        relative
+        min-h-[100svh]
+        md:h-[75vh]
+        lg:h-[80vh]
+        pt-28 sm:pt-32
+        overflow-hidden
+        -mb-20 sm:-mb-24
+        flex items-center justify-center
+      "
     >
       {/* FONDO */}
       <Image
@@ -33,7 +34,7 @@ export default function HeroSection() {
       <div className="absolute bottom-[-140px] left-[-140px] w-[340px] h-[340px] bg-white/20 rounded-full blur-3xl" />
 
       {/* CONTENIDO CENTRADO REAL */}
-      <div className="relative z-10 flex items-center justify-center h-full px-4">
+      <div className="relative z-10 flex items-center justify-center w-full px-4">
         <Image
           src="/images/logo nuevo sin fondo.png"
           alt="Zona Creativa"
@@ -41,18 +42,11 @@ export default function HeroSection() {
           height={1000}
           priority
           className="
-    mx-auto
-    w-[340px]
-    sm:w-[480px]
-    md:w-[600px]
-    lg:w-[680px]
-    xl:w-[760px]
-    -translate-y-2
-    sm:-translate-y-8
-    md:-translate-y-10
-    lg:-translate-y-12
-    drop-shadow-[0_16px_40px_rgba(0,0,0,0.35)]
-  "
+            mx-auto
+            w-[280px] sm:w-[420px] md:w-[600px] lg:w-[680px] xl:w-[760px]
+            md:-translate-y-6 lg:-translate-y-10
+            drop-shadow-[0_16px_40px_rgba(0,0,0,0.35)]
+          "
         />
       </div>
 
