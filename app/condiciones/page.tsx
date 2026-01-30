@@ -17,7 +17,7 @@ export default function CondicionesEspacioPage() {
 
         <div className="space-y-6 text-gray-800 leading-relaxed text-sm sm:text-base">
           <p>
-            Nuestra plaza blanda puede instalarse tanto en{" "}
+            Nuestros productos puede instalarse tanto en{" "}
             <b>interior como en exterior</b>, siempre que el espacio esté
             limpio, seco y sea seguro para la instalación de los juegos y para
             los pequeños.

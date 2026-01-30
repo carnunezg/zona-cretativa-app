@@ -19,7 +19,7 @@ export default function TerminosPage() {
           <div>
             <h3 className="font-bold text-fuchsia-600 mb-1">Reserva y pago</h3>
             <p>
-              Para reservar tu fecha, debes abonar el <b>40% del valor total</b>
+              Para reservar tu fecha, debes abonar el <b>10% del valor total</b>
               mediante transferencia. El saldo restante se cancela el día del
               evento, durante la instalación de la plaza blanda.
             </p>
@@ -42,7 +42,7 @@ export default function TerminosPage() {
               Duración del arriendo
             </h3>
             <p>
-              El arriendo tiene una duración de <b>5 a 6 horas</b>, con retiro
+              El arriendo tiene una duración de <b>4 a 5 horas</b>, con retiro
               máximo a las <b>20:00 hrs</b>.
             </p>
           </div>

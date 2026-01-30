@@ -2,7 +2,7 @@ import { FaFacebook, FaInstagram, FaEnvelope } from "react-icons/fa6";
 
 export default function Footer() {
   return (
-    <footer className="bg-white/10 backdrop-blur-md border-t border-white/10">
+    <footer className="bg-orange-500/20 backdrop-blur-md border-t border-white/10">
       <div className="max-w-4xl mx-auto px-2 py-3 text-center">
         <p className="text-xs text-gray-900 mb-2">Síguenos en nuestras redes</p>
 

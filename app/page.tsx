@@ -1,42 +1,38 @@
-"use client";
+import HeroSection from "@/components/sections/HeroSection";
+import ProductsSection from "@/components/sections/ProductsSection";
+import PacksSection from "@/components/sections/PacksSection";
+import AnimateOnScroll from "@/components/AnimateOnScroll";
+import ScrollToTopButton from "@/components/ScrollToTopButton";
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
-
-export default function Hero() {
-  const [animate, setAnimate] = useState(false);
-
-  useEffect(() => {
-    setAnimate(true);
-  }, []);
-
+export default function Home() {
   return (
-    <section
-      className="
-        relative
-        flex-1
-        flex items-center justify-center
-        overflow-hidden
-      "
-    >
-      <div className="relative z-10 mt-7">
-        <Image
-          src="/images/zona creativa sf.png"
-          alt="Zona Creativa"
-          width={900}
-          height={650}
-          priority
-          className="
-            mx-auto
-            w-[260px] sm:w-[340px] md:w-[420px] lg:w-[480px]
-            contrast-125
-            saturate-110
-            brightness-105
-            pointer-events-none
-            
-          "
-        />
-      </div>
-    </section>
+    <>
+      {/* HERO – NARANJA FUERTE */}
+      <HeroSection />
+
+      {/* PRODUCTOS – NARANJA SUAVE */}
+      <section
+        id="productos"
+        className="
+          pt-24
+          scroll-mt-24
+          bg-orange-200
+        "
+      >
+        <AnimateOnScroll>
+          <ProductsSection />
+        </AnimateOnScroll>
+      </section>
+
+      {/* PACKS – NARANJA MÁS INTENSO */}
+      <section id="packs" className="pt-24 scroll-mt-24 bg-orange-300">
+        <AnimateOnScroll>
+          <PacksSection />
+        </AnimateOnScroll>
+      </section>
+
+      {/* BOTÓN FLOTANTE */}
+      <ScrollToTopButton />
+    </>
   );
 }
