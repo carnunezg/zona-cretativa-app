@@ -25,7 +25,9 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Color de texto y líneas
   const textColor = scrolled || open ? "text-gray-900" : "text-white";
+  const hamburgerColor = scrolled || open ? "bg-gray-900" : "bg-white";
   const underlineColor =
     scrolled || open ? "after:bg-gray-900" : "after:bg-white";
 
@@ -64,26 +66,29 @@ export default function Navbar() {
         <div className="flex items-center gap-3">
           {/* HAMBURGER A LA IZQUIERDA */}
           <button
-            className="md:hidden relative w-8 h-8 flex flex-col justify-center items-center group"
+            className="md:hidden relative w-8 h-8 flex flex-col justify-center items-center gap-1"
             onClick={() => setOpen(!open)}
             aria-label="Abrir menú"
           >
+            {/* Línea superior */}
             <span
               className={`
-                block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out
-                ${open ? "rotate-45 translate-y-0" : "-translate-y-1.5"}
+                block h-0.5 w-6 ${hamburgerColor} transform transition duration-300 ease-in-out
+                ${open ? "rotate-45 absolute top-1/2 -translate-y-1/2" : ""}
               `}
             />
+            {/* Línea del medio */}
             <span
               className={`
-                block h-0.5 w-6 bg-current transition-all duration-300 ease-in-out
+                block h-0.5 w-6 ${hamburgerColor} transition-all duration-300 ease-in-out
                 ${open ? "opacity-0" : ""}
               `}
             />
+            {/* Línea inferior */}
             <span
               className={`
-                block h-0.5 w-6 bg-current transform transition duration-300 ease-in-out
-                ${open ? "-rotate-45 translate-y-0" : "translate-y-1.5"}
+                block h-0.5 w-6 ${hamburgerColor} transform transition duration-300 ease-in-out
+                ${open ? "-rotate-45 absolute top-1/2 -translate-y-1/2" : ""}
               `}
             />
           </button>
@@ -145,7 +150,9 @@ export default function Navbar() {
       {/* MENU MOBILE */}
       <div
         className={`
-          md:hidden absolute top-full left-0 w-full bg-white shadow-lg transition-all duration-300
+          md:hidden absolute top-full left-0 w-full
+          bg-white/90 backdrop-blur-md shadow-lg
+          transition-all duration-300
           ${open ? "max-h-screen opacity-100" : "max-h-0 opacity-0 overflow-hidden"}
         `}
       >
