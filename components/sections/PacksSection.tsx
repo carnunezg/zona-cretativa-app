@@ -4,6 +4,7 @@ import { packs } from "@/data/packs";
 import PackCard from "@/components/PackCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
+import Link from "next/link";
 
 // Importa estilos de Swiper
 import "swiper/css";
@@ -13,13 +14,7 @@ export default function PacksSection() {
   return (
     <section
       id="packs"
-      className="
-        w-full
-        pt-8
-        pb-24   /* aumenté el padding bottom para que los puntos se vean */
-        scroll-mt-28
-        bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90
-      "
+      className="w-full pt-8 pb-16 scroll-mt-28 bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90"
     >
       <div className="max-w-6xl mx-auto px-4 relative">
         <h2 className="text-3xl font-bold mb-10 text-center text-white">
@@ -42,15 +37,23 @@ export default function PacksSection() {
         >
           {packs.map((pack) => (
             <SwiperSlide key={pack.id}>
-              <div className="px-2 sm:px-3">
-                <PackCard pack={pack} />
-              </div>
+              <PackCard pack={pack} />
             </SwiperSlide>
           ))}
         </Swiper>
 
-        {/* Dots flotando más abajo y más visibles */}
-        <div className="absolute bottom-6 left-1/2 transform -translate-x-1/2 z-50">
+        {/* Botón para ver todos los packs */}
+        <div className="mt-6 text-center">
+          <Link
+            href="/packs"
+            className="inline-block bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300"
+          >
+            Ver todos los packs
+          </Link>
+        </div>
+
+        {/* Dots flotando */}
+        <div className="absolute bottom-10 left-1/2 transform -translate-x-1/2 z-50">
           <style jsx global>{`
             .swiper-pagination {
               position: static !important;
@@ -61,7 +64,7 @@ export default function PacksSection() {
             .swiper-pagination-bullet {
               width: 8px;
               height: 8px;
-              background: #f97316 !important; /* naranja */
+              background: #f97316 !important;
               opacity: 0.7;
               border-radius: 50%;
               transition: all 0.3s;

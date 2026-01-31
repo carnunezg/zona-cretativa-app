@@ -4,6 +4,7 @@ import { products } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Autoplay } from "swiper/modules";
+import Link from "next/link";
 
 // Importa estilos de Swiper
 import "swiper/css";
@@ -29,25 +30,31 @@ export default function ProductsSection() {
           pagination={{ clickable: true }}
           autoplay={{ delay: 2000, disableOnInteraction: false }}
           breakpoints={{
-            640: { slidesPerView: 1 }, // 1 card en mobile
-            768: { slidesPerView: 2 }, // 2 cards en tablet
-            1024: { slidesPerView: 4 }, // 4 cards en desktop
+            640: { slidesPerView: 1 },
+            768: { slidesPerView: 2 },
+            1024: { slidesPerView: 4 },
           }}
           className="relative"
         >
           {products.slice(0, 6).map((product) => (
             <SwiperSlide key={product.id}>
-              <div className="px-3">
-                {" "}
-                {/* padding lateral para mobile */}
-                <ProductCard product={product} />
-              </div>
+              <ProductCard product={product} />
             </SwiperSlide>
           ))}
         </Swiper>
 
+        {/* Botón para ver todos los productos */}
+        <div className="mt-6 text-center">
+          <Link
+            href="/productos"
+            className="inline-block bg-fuchsia-600 hover:bg-fuchsia-700 text-white font-bold py-2 px-6 rounded-full transition-colors duration-300"
+          >
+            Ver todos los productos
+          </Link>
+        </div>
+
         {/* Dots flotando */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+        <div className="absolute bottom-12 left-1/2 transform -translate-x-1/2 z-50">
           <style jsx global>{`
             .swiper-pagination {
               position: static !important;
@@ -56,8 +63,8 @@ export default function ProductsSection() {
               gap: 8px;
             }
             .swiper-pagination-bullet {
-              width: 12px;
-              height: 12px;
+              width: 8px;
+              height: 8px;
               background: #f97316 !important; /* naranja */
               opacity: 0.7;
               border-radius: 50%;
@@ -65,7 +72,7 @@ export default function ProductsSection() {
             }
             .swiper-pagination-bullet-active {
               opacity: 1;
-              transform: scale(1.4);
+              transform: scale(1.3);
             }
           `}</style>
         </div>
