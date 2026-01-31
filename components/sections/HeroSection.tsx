@@ -43,8 +43,8 @@ export default function HeroSection() {
           priority
           className="
             mx-auto
-            w-[280px] sm:w-[420px] md:w-[600px] lg:w-[680px] xl:w-[760px]
-            md:-translate-y-6 lg:-translate-y-10
+            w-[380px] sm:w-[420px] md:w-[600px] lg:w-[680px] xl:w-[760px]
+            -translate-y-10 sm:-translate-y-4 md:-translate-y-6 lg:-translate-y-10
             drop-shadow-[0_16px_40px_rgba(0,0,0,0.35)]
           "
         />
