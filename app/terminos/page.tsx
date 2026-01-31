@@ -1,6 +1,12 @@
 export default function TerminosPage() {
   return (
-    <section className="flex justify-center px-4 sm:px-8 py-16">
+    <section
+      className="
+        flex justify-center px-4 sm:px-8
+        pt-32 sm:pt-36 md:pt-40 pb-16
+        bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90
+      "
+    >
       <div
         className="
           max-w-3xl w-full
@@ -19,7 +25,7 @@ export default function TerminosPage() {
           <div>
             <h3 className="font-bold text-fuchsia-600 mb-1">Reserva y pago</h3>
             <p>
-              Para reservar tu fecha, debes abonar el <b>10% del valor total</b>
+              Para reservar tu fecha, debes abonar el <b>10% del valor total</b>{" "}
               mediante transferencia. El saldo restante se cancela el día del
               evento, durante la instalación de la plaza blanda.
             </p>
@@ -55,8 +61,7 @@ export default function TerminosPage() {
               La persona que arrienda es responsable del buen uso de los juegos.
               En caso de daño, se aplicará un cobro del <b>20%</b> del valor de
               fábrica del juego afectado. Si el juego queda inutilizable por mal
-              uso, se deberá cubrir el
-              <b> 100% de su valor</b>.
+              uso, se deberá cubrir el <b>100% de su valor</b>.
             </p>
             <p className="mt-2">🤍 Cuidemos juntos los juegos.</p>
           </div>

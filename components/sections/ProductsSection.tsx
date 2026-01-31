@@ -1,22 +1,78 @@
+"use client";
+
 import { products } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+
+// Importa estilos de Swiper
+import "swiper/css";
+import "swiper/css/pagination";
 
 export default function ProductsSection() {
   return (
-    <section id="productos" className="w-full relative pt-16 scroll-mt-28">
+    <section
+      id="productos"
+      className="w-full relative pt-16 scroll-mt-28 bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90"
+    >
       {/* CONTENIDO */}
-      <div className="max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center">Productos</h2>
+      <div className="max-w-6xl mx-auto px-4 relative">
+        <h2 className="text-3xl font-bold mb-10 text-center text-white">
+          Productos
+        </h2>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          slidesPerView={1}
+          spaceBetween={16}
+          loop={true}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 2000, disableOnInteraction: false }}
+          breakpoints={{
+            640: { slidesPerView: 1 }, // 1 card en mobile
+            768: { slidesPerView: 2 }, // 2 cards en tablet
+            1024: { slidesPerView: 4 }, // 4 cards en desktop
+          }}
+          className="relative"
+        >
           {products.slice(0, 6).map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <SwiperSlide key={product.id}>
+              <div className="px-3">
+                {" "}
+                {/* padding lateral para mobile */}
+                <ProductCard product={product} />
+              </div>
+            </SwiperSlide>
           ))}
+        </Swiper>
+
+        {/* Dots flotando */}
+        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-50">
+          <style jsx global>{`
+            .swiper-pagination {
+              position: static !important;
+              display: flex;
+              justify-content: center;
+              gap: 8px;
+            }
+            .swiper-pagination-bullet {
+              width: 12px;
+              height: 12px;
+              background: #f97316 !important; /* naranja */
+              opacity: 0.7;
+              border-radius: 50%;
+              transition: all 0.3s;
+            }
+            .swiper-pagination-bullet-active {
+              opacity: 1;
+              transform: scale(1.4);
+            }
+          `}</style>
         </div>
       </div>
 
       {/* CURVA FINAL */}
-      <div className="mt-16 w-full overflow-hidden leading-none">
+      <div className="mt-0 w-full overflow-hidden leading-none">
         <svg
           viewBox="0 0 1440 90"
           preserveAspectRatio="none"

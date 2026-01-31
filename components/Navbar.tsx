@@ -13,6 +13,7 @@ import {
   FaInstagram,
   FaFacebook,
 } from "react-icons/fa6";
+import Footer from "./Footer";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -33,17 +34,18 @@ export default function Navbar() {
 
   const linkClass = (path: string) =>
     `
-      relative flex items-center gap-2 font-bold
-      transition-colors duration-300
-      ${textColor}
-      after:content-['']
-      after:absolute after:-bottom-1 after:left-1/2
-      after:h-[2px] after:w-0
-      ${underlineColor}
-      after:transition-all after:duration-300
-      hover:after:w-full hover:after:left-0
-      ${pathname === path ? "after:w-full after:left-0" : ""}
-    `;
+    relative flex items-center gap-2 font-bold
+    transition-colors duration-300
+    ${textColor}
+    after:content-['']
+    after:absolute after:-bottom-1
+    after:h-[2px] after:w-0
+    after:bg-current
+    after:transition-all after:duration-300
+    after:left-0 after:right-0 after:mx-auto
+    hover:after:w-full
+    ${pathname === path ? "after:w-full" : ""}
+  `;
 
   const socialIconClass = `
     ${textColor} text-2xl font-bold

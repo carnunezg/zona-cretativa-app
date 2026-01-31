@@ -1,6 +1,12 @@
 export default function CondicionesEspacioPage() {
   return (
-    <section className="flex justify-center px-4 sm:px-8 py-16">
+    <section
+      className="
+        flex justify-center px-4 sm:px-8
+        pt-32 sm:pt-36 md:pt-40 pb-16
+        bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90
+      "
+    >
       <div
         className="
           max-w-3xl w-full
