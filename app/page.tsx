@@ -11,21 +11,14 @@ export default function Home() {
       <HeroSection />
 
       {/* PRODUCTOS – NARANJA SUAVE */}
-      <section
-        id="productos"
-        className="
-          pt-24
-          scroll-mt-24
-          bg-orange-200
-        "
-      >
+      <section id="productos">
         <AnimateOnScroll>
           <ProductsSection />
         </AnimateOnScroll>
       </section>
 
       {/* PACKS – NARANJA MÁS INTENSO */}
-      <section id="packs" className="pt-24 scroll-mt-24 bg-orange-300">
+      <section id="packs">
         <AnimateOnScroll>
           <PacksSection />
         </AnimateOnScroll>

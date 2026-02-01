@@ -12,8 +12,8 @@ export default function HeroSection() {
         md:h-[75vh]
         lg:h-[80vh]
         pt-28 sm:pt-32
+        pb-24 sm:pb-28
         overflow-hidden
-        -mb-20 sm:-mb-24
         flex items-center justify-center
       "
     >
@@ -33,7 +33,7 @@ export default function HeroSection() {
       <div className="absolute top-[-120px] right-[-120px] w-[300px] h-[300px] bg-white/30 rounded-full blur-3xl" />
       <div className="absolute bottom-[-140px] left-[-140px] w-[340px] h-[340px] bg-white/20 rounded-full blur-3xl" />
 
-      {/* CONTENIDO CENTRADO REAL */}
+      {/* CONTENIDO */}
       <div className="relative z-10 flex items-center justify-center w-full px-4">
         <Image
           src="/images/logo nuevo sin fondo.png"
@@ -50,7 +50,7 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* CURVA */}
+      {/* CURVA FINAL MEDIALUNA */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
         <svg
           viewBox="0 0 1440 90"
@@ -58,8 +58,14 @@ export default function HeroSection() {
           className="w-full h-[70px] sm:h-[90px]"
         >
           <path
-            d="M0,40 C240,90 480,0 720,20 960,40 1200,80 1440,40 L1440,0 L0,0 Z"
-            fill="#ffffff"
+            d="
+        M0,0
+        C360,80 1080,80 1440,0
+        L1440,90
+        L0,90
+        Z
+      "
+            fill="#FFEDD4"
           />
         </svg>
       </div>
