@@ -30,11 +30,14 @@ export default function ScrollToTopButton() {
         fixed bottom-6 right-6 z-50
         flex items-center justify-center
         w-12 h-12 rounded-full
-        bg-orange-500 text-white
-        shadow-lg
-        transition-all duration-300 ease-out
 
-        hover:bg-orange-600 hover:scale-110
+        bg-[#2563EB] text-white
+        shadow-lg shadow-blue-900/20
+
+        transition-all duration-300 ease-out
+        hover:bg-[#1E3A8A] hover:scale-110
+
+        focus:outline-none focus:ring-4 focus:ring-blue-300
 
         ${
           visible

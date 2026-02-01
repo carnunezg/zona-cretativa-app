@@ -10,14 +10,18 @@ export default function ProductCard({ product }: Props) {
   return (
     <div
       className="
-        bg-white rounded-2xl shadow-md hover:shadow-xl 
-        transition-transform duration-300 ease-out 
-        hover:-translate-y-1 hover:scale-105
+        bg-white
+        rounded-2xl
+        shadow-md hover:shadow-xl
+        transition-all duration-300 ease-out
+        hover:-translate-y-1 hover:scale-[1.03]
         p-3 flex flex-col
         w-full
         sm:w-[180px] md:w-full
+        border border-slate-200
       "
     >
+      {/* IMAGEN */}
       <div className="relative w-full h-36 sm:h-32 md:h-48 mb-3">
         <Image
           src={product.image}
@@ -27,30 +31,56 @@ export default function ProductCard({ product }: Props) {
         />
       </div>
 
-      <h2 className="text-lg sm:text-base md:text-xl font-extrabold text-center mb-2 text-fuchsia-600">
+      {/* NOMBRE */}
+      <h2 className="text-lg sm:text-base md:text-xl font-extrabold text-center mb-2 text-[#1E3A8A]">
         {product.name}
       </h2>
 
-      <p className="text-center font-semibold text-gray-800 text-sm sm:text-xs md:text-sm">
-        Dimensiones:
+      {/* DIMENSIONES */}
+      <p className="text-center font-semibold text-[#475569] text-sm sm:text-xs md:text-sm">
+        Dimensiones
       </p>
-      <p className="text-center text-gray-700 text-sm sm:text-xs md:text-sm">
-        "{product.dimensions}"
+      <p className="text-center text-[#0F172A] text-sm sm:text-xs md:text-sm mb-2">
+        {product.dimensions}
       </p>
 
-      <div className="mt-3 flex flex-col gap-2">
-        <div className="bg-fuchsia-500 text-white font-bold text-sm sm:text-xs md:text-lg text-center py-1 rounded-xl">
+      {/* PRECIO + CTA */}
+      <div className="mt-auto flex flex-col gap-2">
+        {/* PRECIO */}
+        <div
+          className="
+            bg-[#FACC15]
+            text-[#0F172A]
+            font-extrabold
+            text-sm sm:text-xs md:text-lg
+            text-center
+            py-1.5
+            rounded-xl
+          "
+        >
           CLP ${product.price}
         </div>
 
+        {/* WHATSAPP */}
         <a
           href={`https://wa.me/56949034475?text=${encodeURIComponent(
             `Hola, quiero reservar: ${product.name}`,
           )}`}
           target="_blank"
-          className="w-full inline-flex items-center justify-center gap-1 sm:gap-1.5 bg-green-500 hover:bg-green-400 text-white py-1 sm:py-1.5 rounded-xl text-sm sm:text-xs md:text-sm"
+          className="
+            w-full
+            inline-flex items-center justify-center gap-1.5
+            bg-[#16A34A] hover:bg-[#15803D]
+            text-white
+            py-1.5
+            rounded-xl
+            text-sm sm:text-xs md:text-sm
+            font-semibold
+            transition-colors
+          "
         >
-          <FaWhatsapp className="text-base sm:text-sm" /> Reservar
+          <FaWhatsapp className="text-base sm:text-sm" />
+          Reservar
         </a>
       </div>
     </div>

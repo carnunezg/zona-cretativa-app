@@ -13,11 +13,11 @@ export default function ProductsSection() {
   return (
     <section
       id="productos"
-      className="relative w-full scroll-mt-28 pb-20 sm:pb-24"
+      className="relative w-full scroll-mt-28 pb-16 sm:pb-20"
     >
       {/* CONTENIDO */}
       <div className="relative max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center text-orange-500">
+        <h2 className="text-3xl font-bold mb-8 text-center text-blue-900">
           Productos
         </h2>
 
@@ -49,7 +49,7 @@ export default function ProductsSection() {
             href="/productos"
             className="
               inline-block
-              bg-fuchsia-600 hover:bg-fuchsia-700
+              bg-blue-600 hover:bg-blue-700
               text-white font-bold
               py-2.5 px-8
               rounded-full
@@ -76,35 +76,10 @@ export default function ProductsSection() {
               L0,90
               Z
             "
-            fill="#FFD6A7"
+            fill="#F8FAFC"
           />
         </svg>
       </div>
-
-      {/* SWIPER DOTS */}
-      <style jsx global>{`
-        .swiper-pagination {
-          position: relative !important;
-          margin-top: 12px;
-          display: flex;
-          justify-content: center;
-          gap: 6px;
-        }
-
-        .swiper-pagination-bullet {
-          width: 8px;
-          height: 8px;
-          background: #f97316 !important;
-          opacity: 0.6;
-          border-radius: 9999px;
-          transition: all 0.3s;
-        }
-
-        .swiper-pagination-bullet-active {
-          opacity: 1;
-          transform: scale(1.3);
-        }
-      `}</style>
     </section>
   );
 }
