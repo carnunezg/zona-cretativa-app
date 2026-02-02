@@ -10,27 +10,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#F8FAFC] text-[#0F172A]">
-      {/* MEDIA LUNA HACIA ARRIBA */}
-      <div className="absolute -top-16 left-0 w-full overflow-hidden leading-none">
-        <svg
-          viewBox="0 0 1440 90"
-          preserveAspectRatio="none"
-          className="w-full h-[70px] sm:h-[90px]"
-        >
-          <path
-            d="
-              M0,90
-              C360,10 1080,10 1440,90
-              L1440,0
-              L0,0
-              Z
-            "
-            fill="#F8FAFC"
-          />
-        </svg>
-      </div>
-
+    <footer className="relative bg-[#cddceb] text-[#0F172A]">
       {/* CONTENIDO */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 pt-12 pb-8">
         {/* ICONOS INFORMATIVOS */}
@@ -69,7 +49,7 @@ export default function Footer() {
         </div>
 
         {/* LÍNEA SEPARADORA */}
-        <div className="w-full border-t border-slate-300/60 mb-8"></div>
+        <div className="w-full border-t border-slate-400/60 mb-8"></div>
 
         {/* REDES SOCIALES */}
         <div className="text-center">

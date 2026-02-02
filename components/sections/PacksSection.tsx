@@ -16,7 +16,7 @@ export default function PacksSection() {
       className="relative w-full bg-[F8FAFC] scroll-mt-28 pb-14 sm:pb-16"
     >
       <div className="relative max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-10 text-center text-blue-900">
+        <h2 className="text-3xl font-bold mb-5 text-center text-blue-900">
           Packs
         </h2>
 
@@ -43,17 +43,17 @@ export default function PacksSection() {
         </Swiper>
 
         {/* BOTÓN */}
-        <div className="mt-6 text-center">
+        <div className="mt-6  text-center">
           <Link
             href="/packs"
             className="
-              inline-block
-              bg-blue-600 hover:bg-blue-700
-              text-white font-bold
-              py-2.5 px-8
-              rounded-full
-              transition-colors duration-300
-            "
+      inline-block
+      bg-blue-600 hover:bg-blue-700
+      text-white font-bold
+      py-2.5 px-8
+      rounded-full
+      transition-colors duration-300
+    "
           >
             Ver todos los packs
           </Link>
