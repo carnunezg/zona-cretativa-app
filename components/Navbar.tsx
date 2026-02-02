@@ -116,10 +116,10 @@ export default function Navbar() {
             <FaTags /> Packs
           </Link>
           <Link href="/terminos" className={linkClass("/terminos")}>
-            <FaFileContract /> Términos
+            <FaFileContract /> Términos y condiciones
           </Link>
           <Link href="/condiciones" className={linkClass("/condiciones")}>
-            <FaHouseCircleCheck /> Condiciones
+            <FaHouseCircleCheck /> Requisitos del Espacio
           </Link>
         </div>
 
@@ -162,14 +162,18 @@ export default function Navbar() {
           {[
             ["/productos", "Productos", <FaBoxOpen key="" />],
             ["/packs", "Packs", <FaTags key="" />],
-            ["/terminos", "Términos", <FaFileContract key="" />],
-            ["/condiciones", "Condiciones", <FaHouseCircleCheck key="" />],
+            ["/terminos", "Términos y condiciones", <FaFileContract key="" />],
+            [
+              "/condiciones",
+              "Requisitos del Espacio",
+              <FaHouseCircleCheck key="" />,
+            ],
           ].map(([href, label, icon]) => (
             <Link
               key={href as string}
               href={href as string}
               onClick={() => setOpen(false)}
-              className={`flex items-center gap-3 font-semibold text-gray-900 hover:text-orange-500`}
+              className={`flex items-center gap-3 font-semibold text-gray-900 hover:text-blue-900`}
             >
               {icon}
               {label}

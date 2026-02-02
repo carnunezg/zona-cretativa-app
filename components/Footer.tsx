@@ -10,7 +10,7 @@ import {
 
 export default function Footer() {
   return (
-    <footer className="relative bg-[#cddceb] text-[#0F172A]">
+    <footer className="relative bg-[#DDE3E9] text-[#0F172A]">
       {/* CONTENIDO */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 pt-12 pb-8">
         {/* ICONOS INFORMATIVOS */}
@@ -49,7 +49,7 @@ export default function Footer() {
         </div>
 
         {/* LÍNEA SEPARADORA */}
-        <div className="w-full border-t border-slate-400/60 mb-8"></div>
+        <div className="w-full border-t border-slate-400/60 mb-2"></div>
 
         {/* REDES SOCIALES */}
         <div className="text-center">

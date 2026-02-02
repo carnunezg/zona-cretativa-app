@@ -4,34 +4,34 @@ export default function CondicionesEspacioPage() {
       className="
         flex justify-center px-4 sm:px-8
         pt-32 sm:pt-36 md:pt-40 pb-16
-        bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90
+         bg-gradient-to-b  from-blue-800/95 via-blue-400/90 to-blue-100/85
       "
     >
       <div
         className="
           max-w-3xl w-full
-          bg-white/85 backdrop-blur-md
+          bg-white
           rounded-3xl
-          shadow-xl
+          shadow-lg
           p-8 sm:p-12
-          border border-white/40
+          border border-slate-200
         "
       >
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-green-600 mb-8">
-          Condiciones del Espacio
+        <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-[#1E3A8A] mb-8">
+          Requisitos del Espacio
         </h1>
 
-        <div className="space-y-6 text-gray-800 leading-relaxed text-sm sm:text-base">
+        <div className="space-y-6 text-[#0F172A] leading-relaxed text-sm sm:text-base">
           <p>
-            Nuestros productos puede instalarse tanto en{" "}
-            <b>interior como en exterior</b>, siempre que el espacio esté
-            limpio, seco y sea seguro para la instalación de los juegos y para
-            los pequeños.
+            Nuestros productos pueden instalarse tanto en{" "}
+            <b>interior como exterior</b>, siempre que el espacio esté limpio,
+            seco y sea seguro para la instalación y el uso por parte de los
+            niños.
           </p>
 
           <div>
-            <p className="font-semibold mb-2">
-              Es ideal para superficies como:
+            <p className="font-semibold mb-2 text-[#2563EB]">
+              Superficies recomendadas:
             </p>
             <ul className="list-disc list-inside space-y-1">
               <li>Piso flotante</li>
@@ -42,13 +42,12 @@ export default function CondicionesEspacioPage() {
           </div>
 
           <p>
-            Antes del evento, te pedimos verificar que cuentas con el
-            <b> espacio suficiente</b> para la correcta instalación.
+            Antes del evento, te pedimos verificar que cuentas con el{" "}
+            <b>espacio suficiente</b> para la correcta instalación.
           </p>
 
-          <p className="text-green-700 font-medium">
-            Si tienes dudas o necesitas orientación, con gusto te ayudamos a
-            revisar las medidas 🤍
+          <p className="text-[#16A34A] font-medium">
+            Si tienes dudas o necesitas orientación, con gusto te ayudamos 🤍
           </p>
         </div>
       </div>

@@ -46,9 +46,9 @@ export default function ComboCard({ pack }: Props) {
       {/* PRECIOS + CTA */}
       <div className="mt-auto flex flex-col gap-2">
         {/* PRECIO ANTES */}
-        <div
+        {/* <div
           className="
-            bg-slate-100
+           
             text-slate-500
             text-sm sm:text-xs
             text-center
@@ -59,12 +59,12 @@ export default function ComboCard({ pack }: Props) {
           "
         >
           Antes: CLP ${pack.oldPrice}
-        </div>
+        </div> */}
 
         {/* PRECIO AHORA */}
         <div
           className="
-            bg-[#FACC15]
+           
             text-[#0F172A]
             font-extrabold
             text-sm sm:text-xs md:text-lg
@@ -73,7 +73,7 @@ export default function ComboCard({ pack }: Props) {
             rounded-xl
           "
         >
-          Ahora: CLP ${pack.price}
+          CLP ${pack.price}
         </div>
 
         {/* WHATSAPP */}
@@ -95,7 +95,7 @@ export default function ComboCard({ pack }: Props) {
           "
         >
           <FaWhatsapp className="text-base sm:text-sm" />
-          Reservar Pack
+          Reservar Ahora
         </a>
       </div>
     </div>

@@ -38,7 +38,7 @@ export default function ProductCard({ product }: Props) {
 
       {/* DIMENSIONES */}
       <p className="text-center font-semibold text-[#475569] text-sm sm:text-xs md:text-sm">
-        Dimensiones
+        Medidas
       </p>
       <p className="text-center text-[#0F172A] text-sm sm:text-xs md:text-sm mb-2">
         {product.dimensions}
@@ -49,7 +49,6 @@ export default function ProductCard({ product }: Props) {
         {/* PRECIO */}
         <div
           className="
-            bg-[#FACC15]
             text-[#0F172A]
             font-extrabold
             text-sm sm:text-xs md:text-lg
@@ -80,7 +79,7 @@ export default function ProductCard({ product }: Props) {
           "
         >
           <FaWhatsapp className="text-base sm:text-sm" />
-          Reservar
+          Reservar Ahora
         </a>
       </div>
     </div>

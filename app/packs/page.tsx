@@ -6,25 +6,22 @@ export default function PackPage() {
     <section
       className="
         text-center
-        p-8
-        bg-gradient-to-b from-orange-500/95 via-orange-400/85 to-orange-300/90
+        bg-gradient-to-b from-blue-800/95 via-blue-400/90 to-blue-100/85
         pt-32 sm:pt-36 md:pt-40
+        pb-16
+        px-6
       "
     >
       <h1 className="mb-6 text-center">
         <span
           className="
             inline-block
-            bg-fuchsia-600
             text-white
-            text-2xl sm:text-2xl
-            font-semibold
-            px-5 sm:px-6
-            py-1.5 sm:py-2
-            rounded-2xl
+            font-bold
+            text-2xl sm:text-3xl
           "
         >
-          Packs y Promociones
+          Packs
         </span>
       </h1>
 
