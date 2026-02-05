@@ -15,7 +15,6 @@ export default function ProductsSection() {
       id="productos"
       className="relative w-full scroll-mt-28 pb-5 sm:pb-10"
     >
-      {/* CONTENIDO */}
       <div className="relative max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-bold mb-5 text-center text-blue-900">
           Productos
@@ -38,6 +37,7 @@ export default function ProductsSection() {
         >
           {products.slice(0, 6).map((product) => (
             <SwiperSlide key={product.id} className="flex justify-center">
+              {/* 👇 SIN LINK */}
               <ProductCard product={product} />
             </SwiperSlide>
           ))}
@@ -51,7 +51,7 @@ export default function ProductsSection() {
               inline-block
               bg-blue-600 hover:bg-blue-700
               text-white font-bold
-               text-sm sm:text-xs md:text-sm
+              text-sm sm:text-xs md:text-sm
               py-2 px-5
               rounded-full
               transition-colors duration-300
@@ -61,7 +61,7 @@ export default function ProductsSection() {
           </Link>
         </div>
       </div>
-      {/* LÍNEA SEPARADORA */}
+
       <div className="mt-10 w-full border-t border-slate-300/60"></div>
     </section>
   );

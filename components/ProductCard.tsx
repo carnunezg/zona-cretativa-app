@@ -1,14 +1,20 @@
+"use client";
+
 import Image from "next/image";
 import { Product } from "@/types/product";
 import { FaWhatsapp } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 interface Props {
   product: Product;
 }
 
 export default function ProductCard({ product }: Props) {
+  const router = useRouter();
+
   return (
     <div
+      onClick={() => router.push(`/productos/${product.id}`)}
       className="
         bg-white
         rounded-2xl
@@ -19,6 +25,7 @@ export default function ProductCard({ product }: Props) {
         w-full
         sm:w-[180px] md:w-full
         border border-slate-200
+        cursor-pointer
       "
     >
       {/* IMAGEN */}
@@ -47,16 +54,7 @@ export default function ProductCard({ product }: Props) {
       {/* PRECIO + CTA */}
       <div className="mt-auto flex flex-col gap-2">
         {/* PRECIO */}
-        <div
-          className="
-            text-[#0F172A]
-            font-extrabold
-            text-sm sm:text-xs md:text-lg
-            text-center
-            py-1.5
-            rounded-xl
-          "
-        >
+        <div className="text-[#0F172A] font-extrabold text-sm sm:text-xs md:text-lg text-center py-1.5">
           CLP ${product.price}
         </div>
 
@@ -66,6 +64,7 @@ export default function ProductCard({ product }: Props) {
             `Hola, quiero reservar: ${product.name}`,
           )}`}
           target="_blank"
+          onClick={(e) => e.stopPropagation()} // 🔥 CLAVE
           className="
             w-full
             inline-flex items-center justify-center gap-1.5
