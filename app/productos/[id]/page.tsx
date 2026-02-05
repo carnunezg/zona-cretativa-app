@@ -1,5 +1,6 @@
 import { products } from "@/data/products";
 import Image from "next/image";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   FaClock,
@@ -7,6 +8,7 @@ import {
   FaRulerCombined,
   FaCircleCheck,
   FaWhatsapp,
+  FaArrowLeft,
 } from "react-icons/fa6";
 
 export const dynamicParams = false;
@@ -34,6 +36,20 @@ export default async function ProductoDetallePage({ params }: Props) {
 
   return (
     <section className="pt-28 sm:pt-32 pb-16 px-4 bg-gradient-to-b from-blue-800/95 via-blue-400/90 to-blue-100/85">
+      <Link
+        href="/productos"
+        className="
+    inline-flex items-center gap-2
+    text-white/90 hover:text-white
+    text-sm sm:text-base
+    font-semibold
+    mb-6
+    transition-colors
+  "
+      >
+        <FaArrowLeft />
+        Volver a productos
+      </Link>
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
         {/* IMAGEN */}
         <div className="flex justify-center">
