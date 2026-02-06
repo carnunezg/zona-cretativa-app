@@ -13,7 +13,6 @@ import {
   FaInstagram,
   FaFacebook,
 } from "react-icons/fa6";
-import Footer from "./Footer";
 
 export default function Navbar() {
   const pathname = usePathname();
