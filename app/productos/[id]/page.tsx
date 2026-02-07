@@ -48,7 +48,7 @@ export default async function ProductoDetallePage({ params }: Props) {
   "
       >
         <FaArrowLeft />
-        Volver a productos
+        Volver
       </Link>
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
         {/* IMAGEN */}

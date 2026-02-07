@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { Product } from "@/types/product";
 import { FaWhatsapp } from "react-icons/fa6";
@@ -13,14 +14,16 @@ export default function ProductCard({ product }: Props) {
   const router = useRouter();
 
   return (
-    <div
+    <motion.div
       onClick={() => router.push(`/productos/${product.id}`)}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      whileHover={{ y: -6, scale: 1.03 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
       className="
         bg-white
         rounded-2xl
         shadow-md hover:shadow-xl
-        transition-all duration-300 ease-out
-        hover:-translate-y-1 hover:scale-[1.03]
         p-3 flex flex-col
         w-full
         sm:w-[180px] md:w-full
@@ -29,12 +32,12 @@ export default function ProductCard({ product }: Props) {
       "
     >
       {/* IMAGEN */}
-      <div className="relative w-full h-36 sm:h-32 md:h-48 mb-3">
+      <div className="relative w-full h-36 sm:h-32 md:h-48 mb-3 overflow-hidden rounded-xl">
         <Image
           src={product.image}
           alt={product.name}
           fill
-          className="object-contain rounded-xl"
+          className="object-contain"
         />
       </div>
 
@@ -53,18 +56,16 @@ export default function ProductCard({ product }: Props) {
 
       {/* PRECIO + CTA */}
       <div className="mt-auto flex flex-col gap-2">
-        {/* PRECIO */}
         <div className="text-[#0F172A] font-extrabold text-sm sm:text-xs md:text-lg text-center py-1.5">
           CLP ${product.price}
         </div>
 
-        {/* WHATSAPP */}
         <a
           href={`https://wa.me/56949034475?text=${encodeURIComponent(
             `Hola, quiero reservar: ${product.name}`,
           )}`}
           target="_blank"
-          onClick={(e) => e.stopPropagation()} // 🔥 CLAVE
+          onClick={(e) => e.stopPropagation()} // 🔥 clave
           className="
             w-full
             inline-flex items-center justify-center gap-1.5
@@ -81,6 +82,6 @@ export default function ProductCard({ product }: Props) {
           Reservar Ahora
         </a>
       </div>
-    </div>
+    </motion.div>
   );
 }

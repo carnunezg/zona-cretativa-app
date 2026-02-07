@@ -11,16 +11,12 @@ import "swiper/css/pagination";
 
 export default function PacksSection() {
   return (
-    <section
-      id="packs"
-      className="relative w-full bg-[F8FAFC] scroll-mt-28 pb-14 sm:pb-16"
-    >
+    <section id="packs" className="relative w-full scroll-mt-28 pb-5 sm:pb-10">
       <div className="relative max-w-6xl mx-auto px-4">
         <h2 className="text-3xl font-bold mb-5 text-center text-blue-900">
           Packs
         </h2>
 
-        {/* SLIDER */}
         <Swiper
           modules={[Pagination, Autoplay]}
           slidesPerView={1}
@@ -42,15 +38,14 @@ export default function PacksSection() {
           ))}
         </Swiper>
 
-        {/* BOTÓN */}
-        <div className="mt-6  text-center">
+        <div className="mt-6 text-center">
           <Link
             href="/packs"
             className="
               inline-block
               bg-blue-600 hover:bg-blue-700
               text-white font-bold
-               text-sm sm:text-xs md:text-sm
+              text-sm sm:text-xs md:text-sm
               py-2 px-5
               rounded-full
               transition-colors duration-300
@@ -61,30 +56,7 @@ export default function PacksSection() {
         </div>
       </div>
 
-      {/* SWIPER DOTS */}
-      <style jsx global>{`
-        .swiper-pagination {
-          position: relative !important;
-          margin-top: 12px;
-          display: flex;
-          justify-content: center;
-          gap: 6px;
-        }
-
-        .swiper-pagination-bullet {
-          width: 8px;
-          height: 8px;
-          background: #2563eb !important; /* Azul */
-          opacity: 0.6;
-          border-radius: 9999px;
-          transition: all 0.3s;
-        }
-
-        .swiper-pagination-bullet-active {
-          opacity: 1;
-          transform: scale(1.3);
-        }
-      `}</style>
+      <div className="mt-10 w-full border-t border-slate-300/60"></div>
     </section>
   );
 }

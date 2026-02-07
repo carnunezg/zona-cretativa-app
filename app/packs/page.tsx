@@ -12,20 +12,13 @@ export default function PackPage() {
         px-6
       "
     >
-      <h1 className="mb-6 text-center">
-        <span
-          className="
-            inline-block
-            text-white
-            font-bold
-            text-2xl sm:text-3xl
-          "
-        >
-          Packs
+      <h1 className="mb-10">
+        <span className="inline-block text-white font-bold text-2xl sm:text-3xl">
+          Nuestros Packs
         </span>
       </h1>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
         {packs.map((pack) => (
           <PackCard key={pack.id} pack={pack} />
         ))}
