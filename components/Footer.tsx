@@ -84,7 +84,7 @@ export default function Footer() {
           </div>
 
           <p className="text-[11px] text-[#475569]">
-            Copyright © 2026 Zona Creativa.
+            Copyright © 2026 Zona Creativa
           </p>
         </div>
       </div>
