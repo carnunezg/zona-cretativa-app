@@ -29,7 +29,7 @@ export default function PacksSection() {
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
-          className="pb-6"
+          className="pb-10"
         >
           {packs.map((pack) => (
             <SwiperSlide key={pack.id} className="flex justify-center">
@@ -57,6 +57,30 @@ export default function PacksSection() {
       </div>
 
       <div className="mt-10 w-full border-t border-slate-300/60"></div>
+
+      <style jsx global>{`
+        .swiper-pagination {
+          position: relative !important;
+          margin-top: 20px;
+          display: flex;
+          justify-content: center;
+          gap: 8px;
+        }
+
+        .swiper-pagination-bullet {
+          width: 8px;
+          height: 8px;
+          background: #2563eb !important;
+          opacity: 0.6;
+          border-radius: 9999px;
+          transition: all 0.3s;
+        }
+
+        .swiper-pagination-bullet-active {
+          opacity: 1;
+          transform: scale(1.3);
+        }
+      `}</style>
     </section>
   );
 }

@@ -25,7 +25,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  // Color de texto y líneas
   const textColor = scrolled || open ? "text-gray-900" : "text-white";
   const hamburgerColor = scrolled || open ? "bg-gray-900" : "bg-white";
   const underlineColor =
@@ -63,29 +62,26 @@ export default function Navbar() {
       `}
     >
       <div className="flex items-center justify-between relative z-20">
-        {/* HAMBURGER + LOGO */}
         <div className="flex items-center gap-3">
-          {/* HAMBURGER A LA IZQUIERDA */}
           <button
             className="md:hidden relative w-8 h-8 flex flex-col justify-center items-center gap-1"
             onClick={() => setOpen(!open)}
             aria-label="Abrir menú"
           >
-            {/* Línea superior */}
             <span
               className={`
                 block h-0.5 w-6 ${hamburgerColor} transform transition duration-300 ease-in-out
                 ${open ? "rotate-45 absolute top-1/2 -translate-y-1/2" : ""}
               `}
             />
-            {/* Línea del medio */}
+
             <span
               className={`
                 block h-0.5 w-6 ${hamburgerColor} transition-all duration-300 ease-in-out
                 ${open ? "opacity-0" : ""}
               `}
             />
-            {/* Línea inferior */}
+
             <span
               className={`
                 block h-0.5 w-6 ${hamburgerColor} transform transition duration-300 ease-in-out
@@ -94,7 +90,6 @@ export default function Navbar() {
             />
           </button>
 
-          {/* LOGO */}
           <Link href="/">
             <Image
               src="/images/logo nuevo sin fondo.png"
@@ -106,7 +101,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* MENU DESKTOP */}
         <div className="hidden md:flex items-center gap-8">
           <Link href="/productos" className={linkClass("/productos")}>
             <FaBoxOpen /> Productos
@@ -122,7 +116,6 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* REDES SOCIALES */}
         <div className="flex items-center gap-4">
           <a
             href="https://www.instagram.com/zonacreativapf"
@@ -148,7 +141,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* MENU MOBILE */}
       <div
         className={`
           md:hidden absolute top-full left-0 w-full

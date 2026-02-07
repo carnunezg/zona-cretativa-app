@@ -20,7 +20,6 @@ export default function ProductsSection() {
           Productos
         </h2>
 
-        {/* SLIDER */}
         <Swiper
           modules={[Pagination, Autoplay]}
           slidesPerView={1}
@@ -33,17 +32,15 @@ export default function ProductsSection() {
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 4 },
           }}
-          className="pb-6"
+          className="pb-10"
         >
           {products.slice(0, 6).map((product) => (
             <SwiperSlide key={product.id} className="flex justify-center">
-              {/* 👇 SIN LINK */}
               <ProductCard product={product} />
             </SwiperSlide>
           ))}
         </Swiper>
 
-        {/* BOTÓN */}
         <div className="mt-6 text-center">
           <Link
             href="/productos"

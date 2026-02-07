@@ -51,7 +51,6 @@ export default async function ProductoDetallePage({ params }: Props) {
         Volver
       </Link>
       <div className="max-w-6xl mx-auto grid md:grid-cols-2 gap-10 items-start">
-        {/* IMAGEN */}
         <div className="flex justify-center">
           <Image
             src={product.image}
@@ -63,7 +62,6 @@ export default async function ProductoDetallePage({ params }: Props) {
           />
         </div>
 
-        {/* INFO */}
         <div
           className="
             bg-white/85 backdrop-blur-md
@@ -72,7 +70,6 @@ export default async function ProductoDetallePage({ params }: Props) {
             shadow-xl
           "
         >
-          {/* TITULO */}
           <h1
             className="
             text-xl
@@ -86,7 +83,6 @@ export default async function ProductoDetallePage({ params }: Props) {
             {product.name}
           </h1>
 
-          {/* PRECIO */}
           <p
             className="
             text-lg
@@ -100,7 +96,6 @@ export default async function ProductoDetallePage({ params }: Props) {
             CLP ${product.price}
           </p>
 
-          {/* ESTADO */}
           <span
             className="
             inline-flex items-center gap-2
@@ -117,7 +112,6 @@ export default async function ProductoDetallePage({ params }: Props) {
             Disponible para arriendo
           </span>
 
-          {/* DESCRIPCIÓN */}
           <p
             className="
             text-sm
@@ -130,7 +124,6 @@ export default async function ProductoDetallePage({ params }: Props) {
             {product.description}
           </p>
 
-          {/* DETALLES */}
           <ul
             className="
             space-y-2
@@ -163,7 +156,6 @@ export default async function ProductoDetallePage({ params }: Props) {
             </li>
           </ul>
 
-          {/* CTA */}
           <a
             href={`https://wa.me/56949034475?text=${encodeURIComponent(
               `Hola, quiero reservar el producto: ${product.name}`,

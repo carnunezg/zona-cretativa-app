@@ -15,12 +15,12 @@ export default function AnimateOnScroll({
       ([entry]) => {
         if (entry.isIntersecting) {
           setShow(true);
-          observer.disconnect(); // 👈 evita re-trigger
+          observer.disconnect();
         }
       },
       {
-        threshold: 0.15, // 👈 mejor para mobile
-        rootMargin: "0px 0px -80px 0px", // 👈 retrasa la animación
+        threshold: 0.15,
+        rootMargin: "0px 0px -80px 0px",
       },
     );
 

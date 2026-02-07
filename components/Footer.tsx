@@ -11,9 +11,7 @@ import {
 export default function Footer() {
   return (
     <footer className="relative bg-[#DDE3E9] text-[#0F172A]">
-      {/* CONTENIDO */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 pt-12 pb-8">
-        {/* ICONOS INFORMATIVOS */}
         <div className="flex justify-center">
           <div className="w-full max-w-3xl">
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-8 text-center justify-items-center mb-10">
@@ -48,10 +46,8 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* LÍNEA SEPARADORA */}
         <div className="w-full border-t border-slate-400/60 mb-2"></div>
 
-        {/* REDES SOCIALES */}
         <div className="text-center">
           <p className="text-xs mb-3 font-medium text-[#475569]">
             Síguenos en nuestras redes
@@ -88,7 +84,7 @@ export default function Footer() {
           </div>
 
           <p className="text-[11px] text-[#475569]">
-            © 2026 Zona Creativa. Todos los derechos reservados.
+            Copyright © 2026 Zona Creativa.
           </p>
         </div>
       </div>

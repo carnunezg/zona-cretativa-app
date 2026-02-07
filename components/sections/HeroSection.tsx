@@ -17,7 +17,6 @@ export default function HeroSection() {
         flex items-center justify-center
       "
     >
-      {/* FONDO */}
       <Image
         src="/images/fondoamanda.jpeg"
         alt="Fondo Zona Creativa"
@@ -26,14 +25,11 @@ export default function HeroSection() {
         className="object-cover"
       />
 
-      {/* OVERLAY AZUL MARCA */}
       <div className="absolute inset-0 bg-gradient-to-b from-blue-900/95 via-blue-800/90 to-blue-700/85" />
 
-      {/* EFECTOS DE LUZ */}
       <div className="absolute top-[-140px] right-[-140px] w-[340px] h-[340px] bg-yellow-300/20 rounded-full blur-3xl" />
       <div className="absolute bottom-[-160px] left-[-160px] w-[360px] h-[360px] bg-white/20 rounded-full blur-3xl" />
 
-      {/* CONTENIDO */}
       <div className="relative z-10 flex items-center justify-center w-full px-4">
         <Image
           src="/images/logo nuevo sin fondo.png"
@@ -50,7 +46,6 @@ export default function HeroSection() {
         />
       </div>
 
-      {/* CURVA FINAL – MEDIALUNA LIMPIA */}
       <div className="absolute bottom-0 left-0 w-full overflow-hidden leading-none">
         <svg
           viewBox="0 0 1440 90"

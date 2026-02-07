@@ -31,7 +31,6 @@ export default function ProductCard({ product }: Props) {
         cursor-pointer
       "
     >
-      {/* IMAGEN */}
       <div className="relative w-full h-36 sm:h-32 md:h-48 mb-3 overflow-hidden rounded-xl">
         <Image
           src={product.image}
@@ -41,12 +40,10 @@ export default function ProductCard({ product }: Props) {
         />
       </div>
 
-      {/* NOMBRE */}
       <h2 className="text-lg sm:text-base md:text-xl font-extrabold text-center mb-2 text-[#1E3A8A]">
         {product.name}
       </h2>
 
-      {/* DIMENSIONES */}
       <p className="text-center font-semibold text-[#475569] text-sm sm:text-xs md:text-sm">
         Medidas
       </p>
@@ -54,7 +51,6 @@ export default function ProductCard({ product }: Props) {
         {product.dimensions}
       </p>
 
-      {/* PRECIO + CTA */}
       <div className="mt-auto flex flex-col gap-2">
         <div className="text-[#0F172A] font-extrabold text-sm sm:text-xs md:text-lg text-center py-1.5">
           CLP ${product.price}
@@ -65,7 +61,7 @@ export default function ProductCard({ product }: Props) {
             `Hola, quiero reservar: ${product.name}`,
           )}`}
           target="_blank"
-          onClick={(e) => e.stopPropagation()} // 🔥 clave
+          onClick={(e) => e.stopPropagation()}
           className="
             w-full
             inline-flex items-center justify-center gap-1.5

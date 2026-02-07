@@ -31,7 +31,6 @@ export default function PackCard({ pack }: Props) {
         cursor-pointer
       "
     >
-      {/* IMAGEN */}
       <div className="relative w-full h-36 sm:h-32 md:h-48 mb-3 overflow-hidden rounded-xl">
         <Image
           src={pack.image}
@@ -41,12 +40,10 @@ export default function PackCard({ pack }: Props) {
         />
       </div>
 
-      {/* TÍTULO */}
       <h2 className="text-lg sm:text-base md:text-xl font-extrabold text-center mb-2 text-[#1E3A8A]">
         {pack.title}
       </h2>
 
-      {/* INCLUYE */}
       <p className="text-center font-semibold text-[#475569] text-sm sm:text-xs md:text-sm">
         Incluye
       </p>
@@ -54,7 +51,6 @@ export default function PackCard({ pack }: Props) {
         {pack.includes}
       </p>
 
-      {/* PRECIO + CTA */}
       <div className="mt-auto flex flex-col gap-2">
         <div className="text-[#0F172A] font-extrabold text-sm sm:text-xs md:text-lg text-center py-1.5">
           CLP ${pack.price}
