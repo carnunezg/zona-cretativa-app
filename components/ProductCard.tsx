@@ -52,7 +52,7 @@ export default function ProductCard({ product }: Props) {
       </p>
 
       <div className="mt-auto flex flex-col gap-2">
-        <div className="text-[#0F172A] font-extrabold text-sm sm:text-xs md:text-lg text-center py-1.5">
+        <div className="text-[#F59E0B] font-extrabold text-xm sm:text-xs md:text-lg text-center py-1.5">
           CLP ${product.price}
         </div>
 
