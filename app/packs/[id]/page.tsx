@@ -8,6 +8,7 @@ import {
   FaCircleCheck,
   FaWhatsapp,
   FaArrowLeft,
+  FaBoxOpen,
 } from "react-icons/fa6";
 
 export const dynamicParams = false;
@@ -69,14 +70,25 @@ export default async function PackDetallePage({ params }: Props) {
           </p>
 
           <ul className="space-y-3 text-sm sm:text-base text-slate-700 mb-6">
+            <li className="flex items-start gap-3">
+              <FaBoxOpen className="text-blue-600 mt-0.5 text-3xl sm:text-xl" />
+              <span>
+                <b>Incluye:</b> {pack.includes}
+              </span>
+            </li>
+
             <li className="flex items-center gap-3">
               <FaClock className="text-blue-600" />
-              <b>Tiempo de arriendo:</b> {pack.duration}
+              <span>
+                <b>Tiempo de arriendo:</b> {pack.duration}
+              </span>
             </li>
 
             <li className="flex items-center gap-3">
               <FaChild className="text-blue-600" />
-              <b>Edad recomendada:</b> {pack.age}
+              <span>
+                <b>Edad recomendada:</b> {pack.age}
+              </span>
             </li>
           </ul>
 
