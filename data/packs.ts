@@ -3,7 +3,7 @@ import { Pack } from "@/types/pack";
 export const packs: Pack[] = [
   {
     id: 1,
-    title: "Pack Diversión Total",
+    title: "Pack 1 Diversión Total",
     includes:
       "Castillo Inflable + Piscina de Pelotas + Resbalín + 2 Ponys Saltarín",
     description:
@@ -16,7 +16,7 @@ export const packs: Pack[] = [
   },
   {
     id: 2,
-    title: "Pack Aventuras y Sonrisas",
+    title: "Pack 2 Aventuras y Sonrisas",
     includes: "Piscina de Pelotas + Resbalín + 2 Ponys Saltarín",
     description:
       "Ideal para espacios medianos y celebraciones llenas de risas. Un pack pensado para que los niños exploren, jueguen y se diviertan de forma segura con distintas actividades dinámicas.",
@@ -28,7 +28,7 @@ export const packs: Pack[] = [
   },
   {
     id: 3,
-    title: "Pack Saltos y Aventuras",
+    title: "Pack 3 Saltos y Aventuras",
     includes: "Castillo Inflable + Resbalín + 2 Ponys Saltarín",
     description:
       "Perfecto para pequeños llenos de energía. Este pack combina saltos, deslizamientos y juegos interactivos, creando un ambiente de diversión activa que encantará a los niños.",
