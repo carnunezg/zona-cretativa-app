@@ -97,7 +97,17 @@ export default async function PackDetallePage({ params }: Props) {
               `Hola, quiero reservar el pack: ${pack.title}`,
             )}`}
             target="_blank"
-            className="inline-flex items-center gap-2 bg-[#16A34A] hover:bg-[#15803D] text-white font-bold px-6 py-3 rounded-xl transition-colors text-sm sm:text-base"
+            className="
+              inline-flex items-center justify-center gap-2
+              w-full sm:w-auto
+              bg-[#16A34A] hover:bg-[#15803D]
+              text-white font-bold
+              px-5 sm:px-6
+              py-3
+              rounded-xl
+              transition-colors
+              text-sm sm:text-base
+            "
           >
             <FaWhatsapp />
             Reservar por WhatsApp
