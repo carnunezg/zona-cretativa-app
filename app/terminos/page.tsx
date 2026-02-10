@@ -48,7 +48,7 @@ export default function TerminosPage() {
               Duración del arriendo
             </h3>
             <p>
-              El arriendo tiene una duración de <b>4 a 5 horas</b>, con retiro
+              El arriendo tiene una duración de <b>4 horas</b>, con retiro
               máximo a las <b>20:00 hrs</b>.
             </p>
           </div>

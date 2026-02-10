@@ -8,7 +8,7 @@ export const packs: Pack[] = [
       "Castillo Inflable + Piscina de Pelotas + Resbalín + 2 Ponys Saltarín",
     description:
       "La experiencia más completa para los pequeños. Este pack combina saltos, deslizamientos y juegos libres que mantienen a los niños entretenidos durante horas, fomentando la diversión, el movimiento y la imaginación.",
-    duration: "4 a 5 horas",
+    duration: "4 horas",
     age: "0 a 5 años",
     oldPrice: "51.000",
     price: "40.000",
@@ -20,7 +20,7 @@ export const packs: Pack[] = [
     includes: "Piscina de Pelotas + Resbalín + 2 Ponys Saltarín",
     description:
       "Ideal para espacios medianos y celebraciones llenas de risas. Un pack pensado para que los niños exploren, jueguen y se diviertan de forma segura con distintas actividades dinámicas.",
-    duration: "4 a 5 horas",
+    duration: "4 horas",
     age: "0 a 5 años",
     oldPrice: "31.000",
     price: "25.000",
@@ -32,7 +32,7 @@ export const packs: Pack[] = [
     includes: "Castillo Inflable + Resbalín + 2 Ponys Saltarín",
     description:
       "Perfecto para pequeños llenos de energía. Este pack combina saltos, deslizamientos y juegos interactivos, creando un ambiente de diversión activa que encantará a los niños.",
-    duration: "4 a 5 horas",
+    duration: "4 horas",
     age: "0 a 5 años",
     oldPrice: "31.000",
     price: "25.000",
