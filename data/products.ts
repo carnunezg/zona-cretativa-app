@@ -4,7 +4,7 @@ export const products: Product[] = [
   {
     id: 1,
     name: "Castillo Inflable",
-    price: "20.000",
+    price: "25.000",
     dimensions: "4.60mt Largo, x 2.20mt Ancho, x 2.19mt Alto",
     image: "/images/inflablesf.webp",
     duration: "4 horas",
@@ -15,7 +15,7 @@ export const products: Product[] = [
   {
     id: 2,
     name: "Piscina de Pelotas",
-    price: "20.000",
+    price: "25.000",
     dimensions: "1.60mt Largo x 1.60mt Ancho x 40cm Alto",
     image: "/images/piscinasf.webp",
     duration: "4 horas",
