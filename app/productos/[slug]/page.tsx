@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
 import { notFound, permanentRedirect } from "next/navigation";
-import { FaClock, FaChild, FaRulerCombined } from "react-icons/fa6";
+import { FaClock, FaChild, FaGift, FaHourglassHalf, FaRulerCombined } from "react-icons/fa6";
 import ItemDetail from "@/components/ItemDetail";
+import PackCard from "@/components/PackCard";
+import { RevealGroup, RevealItem } from "@/components/motion/Reveal";
 import { getSiteData, LEGACY_PRODUCT_SLUGS } from "@/lib/catalog";
-import { mediaFor } from "@/lib/media";
-import { productPriceLabel } from "@/lib/pricing";
+import { coverFor, mediaFor, packProductImages } from "@/lib/media";
+import { clp } from "@/lib/pricing";
+import { toneFor } from "@/lib/tones";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -37,17 +40,27 @@ export default async function ProductoDetallePage({ params }: Props) {
   // Direcciones antiguas (/productos/1): redirigir a la nueva.
   if (LEGACY_PRODUCT_SLUGS[slug]) permanentRedirect(`/productos/${LEGACY_PRODUCT_SLUGS[slug]}`);
 
-  const { products, media, contact } = await getSiteData();
+  const { products, packs, media, contact } = await getSiteData();
   const product = products.find((p) => p.slug === slug);
   if (!product) notFound();
 
-  const price = productPriceLabel(product);
+  const hourly = product.billingType === "hour";
+  const amount = hourly ? product.hourlyRate : product.unitPrice;
+  const included = !hourly && product.unitPrice === 0;
+  // Packs que incluyen este servicio (para sugerir el ahorro).
+  const withProduct = packs.filter((p) => p.slots.some((s) => s.productIds.includes(product.id))).slice(0, 3);
+
   return (
     <ItemDetail
       media={mediaFor(media, { type: "product", id: product.id })}
+      section={{ label: "Servicios", href: "/productos" }}
       title={product.name}
+      badge={hourly ? { icon: FaHourglassHalf, label: "Por hora" } : included ? { icon: FaGift, label: "Adicional sin costo" } : undefined}
       image={product.image}
-      price={price === "Incluido" || price === "Consultar" ? price : `CLP ${price}`}
+      tone={toneFor(product.slug)}
+      priceLabel={included ? "Sin costo" : hourly ? "Valor por hora" : "Valor"}
+      price={included ? "Incluido" : amount ? clp(amount) : "Consultar"}
+      priceSuffix={hourly && amount ? "/ hora" : undefined}
       description={product.description}
       features={product.features}
       facts={[
@@ -58,8 +71,23 @@ export default async function ProductoDetallePage({ params }: Props) {
       reserveHref={`/reservar?servicio=${product.slug}`}
       whatsappMessage={`Hola, quiero consultar por: ${product.name}`}
       whatsappNumber={contact.whatsappNumber}
-      backHref="/productos"
-      backLabel="Volver a productos"
+      related={
+        withProduct.length
+          ? {
+              title: "Ahorra con un pack",
+              subtitle: `Estos packs incluyen ${product.name} a precio especial.`,
+              content: (
+                <RevealGroup as="ul" className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                  {withProduct.map((pack) => (
+                    <RevealItem as="li" key={pack.id} className="h-full">
+                      <PackCard pack={pack} cover={coverFor(media, { type: "pack", id: pack.id })} productImages={packProductImages(pack, products, media)} />
+                    </RevealItem>
+                  ))}
+                </RevealGroup>
+              ),
+            }
+          : undefined
+      }
     />
   );
 }

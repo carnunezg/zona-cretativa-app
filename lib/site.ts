@@ -23,6 +23,19 @@ export const DEFAULT_HERO: SiteHero = {
   subtitle: "Castillos inflables, cama elástica, piscina de pelotas, resbalín, ponys saltarines y mucho más para que los niños vivan un día inolvidable.",
 };
 
+/** Compromiso que se transfiere al reservar; el resto se paga el día del evento. */
+export const COMMITMENT_AMOUNT = 1000;
+
+/** Cuenta para la transferencia de compromiso. */
+export const BANK_TRANSFER = {
+  holder: "Karla Cristina Riera Diaz",
+  rut: "26.078.873-6",
+  bank: "Mercado Pago",
+  accountType: "Cuenta Vista",
+  accountNumber: "1048104680",
+  email: "karlard12.2025@gmail.com",
+};
+
 export const DEFAULT_CONTACT: SiteContact = {
   whatsapp: "+56 9 4903 4475",
   whatsappNumber: "56949034475",

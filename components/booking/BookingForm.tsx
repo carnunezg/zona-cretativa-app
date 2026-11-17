@@ -12,12 +12,14 @@ import {
   FaCheck,
   FaCircleCheck,
   FaClock,
+  FaCopy,
   FaGift,
   FaHourglassHalf,
   FaHouse,
   FaLocationDot,
   FaMapPin,
   FaMinus,
+  FaMoneyBillTransfer,
   FaPenToSquare,
   FaPhone,
   FaPlus,
@@ -34,7 +36,7 @@ import type { MediaItem } from "@/types/media";
 import { coverFor } from "@/lib/media";
 import { clp, estimateTotal, isListed, packSelection, productPriceLabel, type Selection } from "@/lib/pricing";
 import { getSupabase } from "@/lib/supabase";
-import { whatsappLink } from "@/lib/site";
+import { BANK_TRANSFER, COMMITMENT_AMOUNT, whatsappLink } from "@/lib/site";
 import { toneFor } from "@/lib/tones";
 
 const COMMUNES = [
@@ -68,9 +70,10 @@ function chileDate(offsetDays = 0) {
 
 function longDate(iso: string) {
   const [y, m, d] = iso.split("-").map(Number);
-  return new Intl.DateTimeFormat("es-CL", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(
+  const text = new Intl.DateTimeFormat("es-CL", { weekday: "long", day: "numeric", month: "long", timeZone: "UTC" }).format(
     new Date(Date.UTC(y, m - 1, d)),
   );
+  return text.charAt(0).toUpperCase() + text.slice(1);
 }
 
 type Done = { code: string; total: number; date: string };
@@ -94,6 +97,38 @@ function StepHeader({ n, done, icon: Icon, title, subtitle }: { n: number; done:
         <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
       </div>
     </div>
+  );
+}
+
+/** Copia un dato al portapapeles y confirma con «Copiado». */
+function CopyButton({ value, label, wide = false }: { value: string; label: string; wide?: boolean }) {
+  const [copied, setCopied] = useState(false);
+  async function copy() {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const area = document.createElement("textarea");
+      area.value = value;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  }
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      aria-label={`Copiar ${label}`}
+      className={`inline-flex shrink-0 items-center justify-center gap-1.5 rounded-full text-xs font-bold transition ${
+        copied ? "bg-emerald-500 text-white" : "bg-brand-50 text-brand-700 hover:bg-brand-100"
+      } ${wide ? "px-4 py-2" : "h-9 w-9 sm:h-8 sm:w-auto sm:px-3"}`}
+    >
+      {copied ? <FaCheck /> : <FaCopy />}
+      <span className={wide ? "" : "hidden sm:inline"}>{copied ? "Copiado" : wide ? `Copiar ${label}` : "Copiar"}</span>
+    </button>
   );
 }
 
@@ -153,6 +188,7 @@ export default function BookingForm({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState<Done | null>(null);
+  const [reported, setReported] = useState(false);
 
   const estimate = useMemo(() => estimateTotal(products, packs, selection), [products, packs, selection]);
   const chosen = products.filter((p) => (selection[p.id] ?? 0) > 0);
@@ -228,17 +264,54 @@ export default function BookingForm({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  /* ───────────── Reserva confirmada ───────────── */
+  /* ───────────── Reserva confirmada: pago del compromiso ───────────── */
   if (done) {
-    const message = `Hola, acabo de reservar en la página web. Código ${done.code}, para el ${longDate(done.date)}. Quisiera coordinar el traslado y el abono.`;
+    const serviceList = chosen
+      .map((p) => {
+        const q = selection[p.id] ?? 0;
+        return p.billingType === "hour" ? `${p.name} (${q} h)` : `${q} ${p.name}`;
+      })
+      .join(", ");
+    const message = [
+      "Hola Zona Creativa 👋 Acabo de reservar en la página web.",
+      "",
+      `*Código:* ${done.code}`,
+      `*Nombre:* ${form.name.trim()}`,
+      `*Fecha:* ${longDate(done.date)}, ${start} a ${end} hrs`,
+      `*Servicios:* ${serviceList}`,
+      `*Dirección:* ${form.address.trim()}, ${form.commune.trim()}`,
+      `*Total servicios:* ${clp(done.total)}`,
+      "",
+      `✅ Ya transferí los *${clp(COMMITMENT_AMOUNT)}* de compromiso. Te adjunto el comprobante.`,
+    ].join("\n");
+    const rest = Math.max(0, done.total - COMMITMENT_AMOUNT);
+    const bankRows: [string, string][] = [
+      ["Nombre", BANK_TRANSFER.holder],
+      ["RUT", BANK_TRANSFER.rut],
+      ["Banco", BANK_TRANSFER.bank],
+      ["Tipo de cuenta", BANK_TRANSFER.accountType],
+      ["N° de cuenta", BANK_TRANSFER.accountNumber],
+      ["Correo", BANK_TRANSFER.email],
+      ["Monto", clp(COMMITMENT_AMOUNT)],
+    ];
+    const allData = bankRows.map(([k, v]) => `${k}: ${v}`).join("\n");
+
+    // Avisa al portal (si la función aún no existe, se ignora) y deja que el enlace abra WhatsApp.
+    const reportTransfer = () => {
+      setReported(true);
+      const supabase = getSupabase();
+      if (supabase) void supabase.rpc("report_web_transfer", { p_code: done.code, p_phone: form.phone });
+    };
+
     return (
       <motion.div
         initial={reduce ? false : { opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto max-w-xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-slate-200/70"
+        className="mx-auto max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-slate-200/70"
       >
-        <div className="relative overflow-hidden bg-linear-to-br from-emerald-500 via-emerald-600 to-brand-700 px-6 pt-10 pb-14 text-center text-white">
+        {/* Encabezado */}
+        <div className="relative overflow-hidden bg-linear-to-br from-emerald-500 via-emerald-600 to-brand-700 px-6 pt-10 pb-16 text-center text-white">
           <span aria-hidden className="animate-float absolute -top-10 -left-10 h-40 w-40 rounded-full bg-white/10" />
           <span aria-hidden className="animate-float-slow absolute -right-8 -bottom-12 h-44 w-44 rounded-full bg-sun-300/20" />
           <span className="animate-pop relative mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-5xl text-emerald-500 shadow-xl">
@@ -248,38 +321,105 @@ export default function BookingForm({
           <p className="relative mt-2 text-white/90">Gracias por preferir Zona Creativa 🎉</p>
         </div>
 
-        <div className="-mt-8 px-6 pb-8 sm:px-10">
-          <div className="relative rounded-2xl bg-white p-5 text-center shadow-card ring-1 ring-slate-200/70">
-            <p className="text-[11px] font-bold tracking-[0.14em] text-slate-400 uppercase">Tu código de reserva</p>
-            <p className="mt-1 font-mono text-3xl font-extrabold tracking-wider text-brand-800">{done.code}</p>
+        <div className="-mt-9 space-y-6 px-5 pb-8 sm:px-10">
+          {/* Código y resumen */}
+          <div className="relative rounded-2xl bg-white p-5 shadow-card ring-1 ring-slate-200/70">
+            <div className="text-center">
+              <p className="text-[11px] font-bold tracking-[0.14em] text-slate-400 uppercase">Tu código de reserva</p>
+              <p className="mt-1 font-mono text-2xl font-extrabold tracking-wide text-brand-800 sm:text-3xl sm:tracking-wider">{done.code}</p>
+            </div>
+            <dl className="mt-4 grid gap-2 border-t border-dashed border-slate-200 pt-4 text-sm sm:grid-cols-3">
+              <div className="flex items-center gap-2 sm:flex-col sm:text-center">
+                <FaCalendarDays className="text-brand-500" />
+                <dd className="font-semibold text-slate-700">{longDate(done.date)}</dd>
+              </div>
+              <div className="flex items-center gap-2 sm:flex-col sm:text-center">
+                <FaClock className="text-sun-500" />
+                <dd className="font-semibold text-slate-700">
+                  {start} a {end} hrs
+                </dd>
+              </div>
+              <div className="flex items-center gap-2 sm:flex-col sm:text-center">
+                <FaReceipt className="text-emerald-500" />
+                <dd className="font-semibold text-slate-700">Total {clp(done.total)}</dd>
+              </div>
+            </dl>
           </div>
 
-          <dl className="mt-6 space-y-3 text-sm">
-            <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand-50 text-brand-700"><FaCalendarDays /></span>
-              <dt className="text-slate-500">Fecha</dt>
-              <dd className="ml-auto font-bold text-slate-800 capitalize">{longDate(done.date)}</dd>
+          {/* Paso de pago */}
+          <section className="overflow-hidden rounded-2xl ring-2 ring-sun-300">
+            <div className="flex items-start gap-3 bg-linear-to-r from-sun-100 via-sun-50 to-white px-5 py-4">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sun-400 text-xl text-brand-950 shadow-sm">
+                <FaMoneyBillTransfer />
+              </span>
+              <div>
+                <p className="text-xs font-extrabold tracking-[0.12em] text-sun-600 uppercase">Último paso</p>
+                <h3 className="text-lg leading-tight font-extrabold text-brand-900 sm:text-xl">
+                  Transfiere {clp(COMMITMENT_AMOUNT)} de compromiso
+                </h3>
+                <p className="mt-1 text-sm text-slate-600">
+                  Es un valor simbólico que confirma el compromiso de ambas partes. El resto
+                  {rest > 0 ? ` (${clp(rest)})` : ""} y el traslado se pagan el día del evento.
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sun-50 text-sun-600"><FaClock /></span>
-              <dt className="text-slate-500">Horario</dt>
-              <dd className="ml-auto font-bold text-slate-800">{start} a {end}</dd>
-            </div>
-            <div className="flex items-center gap-3 border-t border-dashed border-slate-200 pt-3">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-50 text-emerald-600"><FaReceipt /></span>
-              <dt className="text-slate-500">Total servicios</dt>
-              <dd className="ml-auto text-xl font-extrabold text-brand-800">{clp(done.total)}</dd>
-            </div>
-          </dl>
 
-          <p className="mt-6 rounded-2xl bg-slate-50 p-4 text-sm leading-6 text-slate-600">
-            Te contactaremos por WhatsApp para coordinar el <b>traslado</b> (según tu comuna) y el <b>abono</b> que confirma tu fecha.
-          </p>
+            <div className="bg-white p-5">
+              <dl className="divide-y divide-slate-100 rounded-xl ring-1 ring-slate-200">
+                {bankRows.map(([label, value]) => (
+                  <div key={label} className="flex items-center gap-3 px-4 py-2.5">
+                    <div className="min-w-0 flex-1 sm:flex sm:items-center sm:gap-3">
+                      <dt className="text-[11px] font-bold tracking-wide text-slate-400 uppercase sm:w-28 sm:shrink-0 sm:text-xs">{label}</dt>
+                      <dd
+                        className={`min-w-0 text-sm font-semibold [overflow-wrap:anywhere] sm:truncate ${label === "Monto" ? "text-lg font-extrabold text-emerald-600" : "text-ink"}`}
+                      >
+                        {value}
+                      </dd>
+                    </div>
+                    <CopyButton value={label === "Monto" ? String(COMMITMENT_AMOUNT) : value} label={label} />
+                  </div>
+                ))}
+              </dl>
+              <div className="mt-3 flex justify-end">
+                <CopyButton value={allData} label="todos los datos" wide />
+              </div>
+            </div>
+          </section>
 
-          <a href={whatsappLink(message, contact.whatsappNumber)} target="_blank" rel="noopener noreferrer" className="zc-btn zc-btn-green mt-6 w-full">
-            <FaWhatsapp className="text-xl" /> Escribir por WhatsApp
+          {/* Aviso por WhatsApp */}
+          <AnimatePresence mode="wait">
+            {reported ? (
+              <motion.div
+                key="ok"
+                initial={reduce ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="rounded-2xl bg-emerald-50 p-5 text-center ring-1 ring-emerald-200"
+              >
+                <FaCircleCheck className="mx-auto text-3xl text-emerald-500" />
+                <p className="mt-2 font-extrabold text-emerald-800">¡Gracias! Ya le avisamos a Zona Creativa</p>
+                <p className="mt-1 text-sm text-emerald-700">
+                  Revisaremos la transferencia y te escribiremos por WhatsApp para coordinar el traslado. Si no se abrió WhatsApp, usa el botón
+                  de abajo.
+                </p>
+              </motion.div>
+            ) : (
+              <motion.p key="hint" className="text-center text-sm text-slate-500">
+                Cuando hayas transferido, toca el botón y envíanos el comprobante por WhatsApp.
+              </motion.p>
+            )}
+          </AnimatePresence>
+
+          <a
+            href={whatsappLink(message, contact.whatsappNumber)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={reportTransfer}
+            className="zc-btn zc-btn-green zc-shine w-full py-4 text-base"
+          >
+            <FaWhatsapp className="text-xl" /> {reported ? "Enviar comprobante nuevamente" : "Ya transferí · Enviar comprobante"}
           </a>
-          <Link href="/" className="mt-4 flex items-center justify-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-800">
+
+          <Link href="/" className="flex items-center justify-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-800">
             <FaHouse /> Volver al inicio
           </Link>
         </div>
@@ -464,7 +604,7 @@ export default function BookingForm({
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
             {date && (
-              <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3.5 py-1.5 text-sm font-semibold text-brand-800 capitalize">
+              <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3.5 py-1.5 text-sm font-semibold text-brand-800">
                 <FaCalendarCheck className="text-brand-500" /> {longDate(date)}
               </span>
             )}
@@ -521,21 +661,21 @@ export default function BookingForm({
 
       {/* Resumen tipo boleta */}
       <aside className="lg:sticky lg:top-28 lg:self-start">
-        <div className="overflow-hidden rounded-[1.75rem] bg-white shadow-lift ring-1 ring-slate-200/70">
-          <div className="relative overflow-hidden bg-linear-to-br from-brand-800 via-brand-700 to-brand-600 px-5 py-5 text-white">
+        <div className="overflow-hidden rounded-[1.75rem] bg-white shadow-lift ring-1 ring-slate-200/70 lg:flex lg:max-h-[calc(100dvh-8.5rem)] lg:flex-col">
+          <div className="relative shrink-0 overflow-hidden bg-linear-to-br from-brand-800 via-brand-700 to-brand-600 px-5 py-5 text-white [@media(max-height:760px)]:py-3.5">
             <span aria-hidden className="absolute -top-8 -right-6 h-28 w-28 rounded-full bg-sun-300/25 blur-xl" />
             <p className="relative flex items-center gap-2 text-xs font-bold tracking-[0.14em] text-sun-200 uppercase">
               <FaReceipt /> Resumen
             </p>
-            <h2 className="relative mt-1 text-2xl font-extrabold">Tu reserva</h2>
+            <h2 className="relative mt-1 text-2xl font-extrabold [@media(max-height:760px)]:text-xl">Tu reserva</h2>
             {(date || duration) && (
               <p className="relative mt-2 text-sm text-white/85">
-                <span className={date ? "capitalize" : ""}>{date ? longDate(date) : "Fecha por elegir"}</span> · {start} a {end} hrs
+                <span>{date ? longDate(date) : "Fecha por elegir"}</span> · {start} a {end} hrs
               </p>
             )}
           </div>
 
-          <div className="p-5">
+          <div className="min-h-0 flex-1 p-5 lg:overflow-y-auto lg:[scrollbar-width:thin]">
             {chosen.length === 0 ? (
               <div className="rounded-2xl border border-dashed border-slate-200 bg-slate-50 p-6 text-center">
                 <FaGift className="mx-auto text-3xl text-slate-300" />
@@ -597,10 +737,15 @@ export default function BookingForm({
                 </p>
               </div>
             )}
+          </div>
 
-            <div className="mt-4 border-t border-dashed border-slate-200 pt-4">
+          <div className="shrink-0 border-t border-dashed border-slate-200 bg-white px-5 pt-4 pb-5 lg:shadow-[0_-12px_24px_-18px_rgba(15,26,58,0.35)]">
+            <div>
               <div className="flex items-end justify-between gap-3">
-                <span className="text-sm font-bold text-slate-600">Total estimado</span>
+                <span className="text-sm leading-tight font-bold text-slate-600">
+                  Total estimado
+                  <span className="block text-[11px] font-medium text-slate-400">sin traslado</span>
+                </span>
                 <motion.span
                   key={estimate.total}
                   initial={reduce ? false : { scale: 1.15, color: "#16a34a" }}
@@ -611,10 +756,10 @@ export default function BookingForm({
                   {clp(estimate.total)}
                 </motion.span>
               </div>
-              <p className="mt-1.5 text-xs leading-5 text-slate-500">No incluye el traslado (flete), que depende de tu comuna y te informamos por WhatsApp.</p>
+              <p className="mt-1.5 text-xs leading-5 text-slate-500 [@media(max-height:760px)]:lg:hidden">No incluye el traslado (flete), que depende de tu comuna y te informamos por WhatsApp.</p>
             </div>
 
-            <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-2xl bg-slate-50 p-3.5 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:ring-brand-200">
+            <label className="mt-4 flex cursor-pointer items-start gap-3 rounded-2xl bg-slate-50 p-3.5 [@media(max-height:760px)]:lg:mt-3 [@media(max-height:760px)]:lg:p-2.5 text-sm text-slate-700 ring-1 ring-slate-200/70 transition hover:ring-brand-200">
               <input type="checkbox" checked={accepted} onChange={(e) => setAccepted(e.target.checked)} className="mt-0.5 h-5 w-5 shrink-0 accent-brand-600" />
               <span>
                 Acepto los{" "}
@@ -656,12 +801,12 @@ export default function BookingForm({
               )}
             </button>
 
-            <ul className="mt-4 space-y-1.5 text-xs text-slate-500">
+            <ul className="mt-4 space-y-1.5 text-xs text-slate-500 [@media(max-height:760px)]:lg:hidden">
               <li className="flex items-center gap-2">
                 <FaCircleCheck className="text-emerald-500" /> Confirmación inmediata con tu código
               </li>
               <li className="flex items-center gap-2">
-                <FaShieldHeart className="text-pink-500" /> Abono de solo el 10% para asegurar tu fecha
+                <FaShieldHeart className="text-pink-500" /> Reservas con solo $1.000; el resto, el día del evento
               </li>
             </ul>
 
@@ -669,7 +814,7 @@ export default function BookingForm({
               href={whatsappLink("Hola, tengo una consulta sobre una reserva", contact.whatsappNumber)}
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50"
+              className="mt-3 flex items-center justify-center gap-2 rounded-xl py-2 text-sm font-semibold text-emerald-700 transition hover:bg-emerald-50 [@media(max-height:760px)]:lg:hidden"
             >
               <FaWhatsapp className="text-lg" /> ¿Dudas? Escríbenos por WhatsApp
             </a>

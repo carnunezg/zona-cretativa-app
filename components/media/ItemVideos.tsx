@@ -11,8 +11,8 @@ export default function ItemVideos({ media }: { media: MediaItem[] }) {
 
   return (
     <div className="max-w-6xl mx-auto mt-12">
-      <h2 className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-extrabold text-white mb-6 drop-shadow">
-        <FaVideo className="text-yellow-300" />
+      <h2 className="flex items-center justify-center gap-2 text-2xl sm:text-3xl font-extrabold text-brand-900 mb-6">
+        <FaVideo className="text-pink-500" />
         {videos.length === 1 ? "Míralo en acción" : "Videos"}
       </h2>
       <div className="flex flex-wrap justify-center gap-6">

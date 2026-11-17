@@ -27,11 +27,11 @@ const TERMS = [
     icon: FaMoneyCheckDollar,
     color: "bg-emerald-100 text-emerald-600",
     title: "Reserva y pago",
-    key: "10% de abono",
+    key: "$1.000 de compromiso",
     body: (
       <>
-        Para reservar tu fecha, debes abonar el <b className="text-sun-600">10% del valor total</b> mediante transferencia. El saldo restante se
-        cancela el día del evento, durante la instalación de la plaza blanda.
+        Para reservar tu fecha, transfiere <b className="text-sun-600">$1.000 como compromiso</b> de ambas partes. El resto del valor
+        se paga el día del evento, durante la instalación de los servicios.
       </>
     ),
   },

@@ -14,8 +14,10 @@ interface Props {
   /** Contenido alternativo cuando no hay imagen por defecto (p. ej. mosaico del pack). */
   fallbackNode?: React.ReactNode;
   alt: string;
-  /** Clases extra para la imagen original cuando se muestra sola */
-  fallbackClassName?: string;
+  /** Fondo degradado del marco (tono de la tarjeta). */
+  toneBg?: string;
+  /** Círculo decorativo detrás de la imagen original. */
+  toneBlob?: string;
 }
 
 /**
@@ -29,8 +31,10 @@ export default function ItemGallery({
   fallbackImage,
   fallbackNode,
   alt,
-  fallbackClassName = "",
+  toneBg = "from-brand-100 via-brand-50 to-white",
+  toneBlob = "bg-brand-200/70",
 }: Props) {
+  const frame = `relative w-full aspect-[5/4] overflow-hidden rounded-[2rem] bg-linear-to-br ${toneBg} shadow-lift ring-1 ring-slate-200/70`;
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
@@ -52,21 +56,25 @@ export default function ItemGallery({
 
   // Sin fotos ni imagen por defecto: mosaico del pack.
   if (slides.length === 0) {
-    return <div className="relative w-full aspect-[4/3] overflow-hidden rounded-3xl bg-white/70 shadow-xl">{fallbackNode}</div>;
+    return <div className={`${frame} bg-white`}>{fallbackNode}</div>;
   }
 
   // Sin contenido adicional: mismo aspecto que la versión original.
   if (slides.length === 1 && fallbackImage && slides[0].src === fallbackImage) {
     return (
-      <div className="flex justify-center">
-        <Image
-          src={fallbackImage}
-          alt={alt}
-          width={520}
-          height={420}
-          className={`object-contain ${fallbackClassName}`}
-          priority
-        />
+      <div className={frame}>
+        <span aria-hidden className={`absolute top-1/2 left-1/2 h-[74%] w-[74%] -translate-x-1/2 -translate-y-1/2 rounded-full ${toneBlob}`} />
+        <span aria-hidden className="absolute bottom-6 left-1/2 h-6 w-1/2 -translate-x-1/2 rounded-[50%] bg-slate-900/10 blur-lg" />
+        <div className="animate-float-slow absolute inset-0">
+          <Image
+            src={fallbackImage}
+            alt={alt}
+            fill
+            priority
+            sizes="(max-width: 1024px) 100vw, 50vw"
+            className="object-contain p-8 drop-shadow-[0_22px_26px_rgba(15,26,58,0.25)] sm:p-12"
+          />
+        </div>
       </div>
     );
   }
@@ -77,11 +85,7 @@ export default function ItemGallery({
 
   return (
     <div className="w-full">
-      <div
-        className={`group relative w-full aspect-[4/3] rounded-3xl overflow-hidden ${
-          current.fit === "cover" ? "bg-white/20 shadow-xl ring-4 ring-white/70" : ""
-        }`}
-      >
+      <div className={`group ${frame}`}>
         <button
           type="button"
           onClick={() => setLightbox(index)}
@@ -95,7 +99,7 @@ export default function ItemGallery({
             fill
             priority={index === 0}
             sizes="(max-width: 768px) 100vw, 50vw"
-            className={current.fit === "cover" ? "object-cover" : "object-contain"}
+            className={current.fit === "cover" ? "object-cover" : "object-contain p-8 drop-shadow-[0_22px_26px_rgba(15,26,58,0.25)]"}
           />
           <span className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/90 text-[#1E3A8A] flex items-center justify-center shadow-md opacity-90 group-hover:scale-110 transition">
             <FaMagnifyingGlassPlus />
@@ -121,10 +125,10 @@ export default function ItemGallery({
       </div>
 
       {(current.title || current.description) && (
-        <div className="mt-3 text-center text-white">
+        <div className="mt-3 text-center text-slate-700">
           {current.title && <p className="font-bold">{current.title}</p>}
           {current.description && (
-            <p className="text-sm text-white/85">{current.description}</p>
+            <p className="text-sm text-slate-500">{current.description}</p>
           )}
         </div>
       )}
@@ -137,10 +141,10 @@ export default function ItemGallery({
             onClick={() => setActive(i)}
             aria-label={`Ver foto ${i + 1}`}
             aria-current={i === index}
-            className={`relative shrink-0 w-20 h-16 sm:w-24 sm:h-20 rounded-xl overflow-hidden bg-white/70 transition ${
+            className={`relative shrink-0 w-20 h-16 sm:w-24 sm:h-20 rounded-xl overflow-hidden bg-white transition ${
               i === index
-                ? "ring-4 ring-yellow-400 scale-105"
-                : "ring-2 ring-white/60 opacity-80 hover:opacity-100"
+                ? "ring-[3px] ring-brand-500 scale-105 shadow-card"
+                : "ring-1 ring-slate-200 opacity-75 hover:opacity-100"
             }`}
           >
             <Image

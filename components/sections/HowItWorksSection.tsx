@@ -6,7 +6,7 @@ import Reveal, { RevealGroup, RevealItem } from "@/components/motion/Reveal";
 const STEPS = [
   { icon: FaGamepad, title: "Elige tus servicios", text: "Escoge un pack o arma tu combinación de servicios favoritos." },
   { icon: FaCalendarCheck, title: "Reserva en línea", text: "Indica fecha, horario y dirección. Tu reserva se confirma al instante." },
-  { icon: FaWhatsapp, title: "Coordinamos y ¡a jugar!", text: "Te escribimos para el traslado y el abono, y llegamos el día del evento." },
+  { icon: FaWhatsapp, title: "Coordinamos y ¡a jugar!", text: "Transfieres $1.000 de compromiso, coordinamos el traslado y llegamos el día del evento." },
 ];
 
 export default function HowItWorksSection() {
