@@ -1,26 +1,151 @@
 @import "tailwindcss";
 
+/*
+  La identidad de Zona Creativa es de fondo claro (sin modo oscuro automático:
+  pintaba el fondo negro en teléfonos con tema oscuro).
+*/
 :root {
-  --background: #f8fafc;
-  --foreground: #171717;
+  --background: #f6f8fd;
+  --foreground: #0f1a3a;
+  color-scheme: light;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  /* Fuentes alojadas en el proyecto (app/fonts): mismas del portal. */
+  --font-sans: var(--font-jakarta), system-ui, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-display: var(--font-baloo), var(--font-jakarta), system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  /* Paleta de marca */
+  --color-brand-50: #eef3ff;
+  --color-brand-100: #dbe5ff;
+  --color-brand-200: #bccfff;
+  --color-brand-300: #8eaeff;
+  --color-brand-400: #5d86f6;
+  --color-brand-500: #3a63e8;
+  --color-brand-600: #1f45d6;
+  --color-brand-700: #1838b4;
+  --color-brand-800: #172f8e;
+  --color-brand-900: #172a6e;
+  --color-brand-950: #0e1a47;
+  --color-sun-50: #fffbea;
+  --color-sun-100: #fff3c4;
+  --color-sun-200: #ffe68a;
+  --color-sun-300: #ffd84f;
+  --color-sun-400: #ffc928;
+  --color-sun-500: #f5a90b;
+  --color-sun-600: #d98506;
+  --color-ink: #0f1a3a;
+
+  --shadow-card: 0 1px 2px rgb(15 26 58 / 0.05), 0 8px 24px -12px rgb(24 56 180 / 0.18);
+  --shadow-lift: 0 2px 4px rgb(15 26 58 / 0.06), 0 22px 44px -18px rgb(24 56 180 / 0.38);
+
+  --animate-float: zc-float 6s ease-in-out infinite;
+  --animate-float-slow: zc-float 9s ease-in-out infinite;
+  --animate-shine: zc-shine 3.2s ease-in-out infinite;
+  --animate-pop: zc-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+}
+
+@keyframes zc-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-14px) rotate(1.5deg); }
+}
+@keyframes zc-shine {
+  0% { transform: translateX(-120%) skewX(-20deg); }
+  60%, 100% { transform: translateX(260%) skewX(-20deg); }
+}
+@keyframes zc-pop {
+  from { opacity: 0; transform: scale(0.92); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, .font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+
+::selection {
+  background: var(--color-sun-300);
+  color: var(--color-brand-900);
+}
+
+@layer components {
+  /* Botones de marca */
+  .zc-btn {
+    @apply relative inline-flex items-center justify-center gap-2 overflow-hidden rounded-full px-6 py-3 font-bold transition-all duration-300 focus:outline-none focus-visible:ring-4 active:scale-[0.98];
+  }
+  .zc-btn-green {
+    @apply bg-[#16A34A] text-white shadow-lg shadow-green-900/20 hover:-translate-y-0.5 hover:bg-[#15803D] hover:shadow-xl hover:shadow-green-900/25 focus-visible:ring-green-300;
+  }
+  .zc-btn-sun {
+    @apply bg-sun-400 text-brand-900 shadow-lg shadow-sun-600/25 hover:-translate-y-0.5 hover:bg-sun-300 hover:shadow-xl focus-visible:ring-sun-200;
+  }
+  .zc-btn-white {
+    @apply bg-white text-brand-800 shadow-lg shadow-brand-900/10 hover:-translate-y-0.5 hover:shadow-xl focus-visible:ring-brand-200;
+  }
+  .zc-btn-ghost {
+    @apply border-2 border-white/70 text-white backdrop-blur-sm hover:bg-white/10 focus-visible:ring-white/40;
+  }
+  /* Brillo que recorre el botón principal */
+  .zc-shine::after {
+    content: "";
+    @apply pointer-events-none absolute inset-y-0 left-0 w-1/3 bg-white/25;
+    animation: var(--animate-shine);
+  }
+  /* Etiqueta pequeña sobre los títulos de sección */
+  .zc-eyebrow {
+    @apply inline-flex items-center gap-2 rounded-full bg-brand-50 px-3.5 py-1 text-xs font-bold tracking-[0.14em] text-brand-700 uppercase ring-1 ring-brand-100;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---------- Carruseles (Swiper) ---------- */
+.zc-swiper .swiper-pagination {
+  position: relative !important;
+  margin-top: 22px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.zc-swiper .swiper-pagination-bullet {
+  width: 8px;
+  height: 8px;
+  background: var(--color-brand-600) !important;
+  opacity: 0.35;
+  border-radius: 9999px;
+  transition: all 0.35s ease;
+}
+
+.zc-swiper .swiper-pagination-bullet-active {
+  opacity: 1;
+  width: 26px;
 }

@@ -1,65 +1,58 @@
 "use client";
 
-import { products } from "@/data/products";
 import ProductCard from "@/components/ProductCard";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, A11y } from "swiper/modules";
 import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa6";
+import SectionHeading from "@/components/SectionHeading";
+import type { CatalogProduct } from "@/types/catalog";
+import type { MediaItem } from "@/types/media";
+import { coverFor } from "@/lib/media";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
-export default function ProductsSection() {
+export default function ProductsSection({ products, media }: { products: CatalogProduct[]; media: MediaItem[] }) {
+  if (!products.length) return null;
   return (
     <section
       id="productos"
-      className="relative w-full scroll-mt-28 pb-5 sm:pb-10"
+      className="relative w-full scroll-mt-28 py-14 sm:py-20"
     >
       <div className="relative max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-5 text-center text-blue-900">
-          Productos
-        </h2>
+        <SectionHeading eyebrow="Nuestros servicios" title="Servicios para cada celebración" subtitle="Inflables, cama elástica, piscina de pelotas y mucho más." />
 
         <Swiper
-          modules={[Pagination, Autoplay]}
+          modules={[Pagination, Autoplay, A11y]}
           slidesPerView={1}
-          spaceBetween={16}
-          loop
+          spaceBetween={20}
+          rewind
           pagination={{ clickable: true }}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          autoplay={{ delay: 4200, disableOnInteraction: false, pauseOnMouseEnter: true }}
+          speed={650}
           breakpoints={{
-            640: { slidesPerView: 1 },
+            480: { slidesPerView: 1.5 },
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 4 },
           }}
-          className="pb-10"
+          className="zc-swiper"
         >
-          {products.slice(0, 6).map((product) => (
-            <SwiperSlide key={product.id} className="flex justify-center">
-              <ProductCard product={product} />
+          {products.map((product) => (
+            <SwiperSlide key={product.id} className="h-auto! px-1 pt-3 pb-5">
+              <ProductCard product={product} cover={coverFor(media, { type: "product", id: product.id })} />
             </SwiperSlide>
           ))}
         </Swiper>
 
-        <div className="mt-6 text-center">
-          <Link
-            href="/productos"
-            className="
-              inline-block
-              bg-blue-600 hover:bg-blue-700
-              text-white font-bold
-              text-sm sm:text-xs md:text-sm
-              py-2 px-5
-              rounded-full
-              transition-colors duration-300
-            "
-          >
-            Ver todos
+        <div className="mt-8 text-center">
+          <Link href="/productos" className="zc-btn zc-btn-white group text-sm">
+            Ver todos los servicios
+            <FaArrowRight className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
 
-      <div className="mt-10 w-full border-t border-slate-300/60"></div>
     </section>
   );
 }

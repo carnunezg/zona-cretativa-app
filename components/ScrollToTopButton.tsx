@@ -11,7 +11,7 @@ export default function ScrollToTopButton() {
       setVisible(window.scrollY > 300);
     };
 
-    window.addEventListener("scroll", onScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
@@ -27,7 +27,7 @@ export default function ScrollToTopButton() {
       onClick={scrollToTop}
       aria-label="Volver arriba"
       className={`
-        fixed bottom-6 right-6 z-50
+        fixed bottom-24 right-6 sm:bottom-[6.5rem] sm:right-7 z-50
         flex items-center justify-center
         w-12 h-12 rounded-full
 

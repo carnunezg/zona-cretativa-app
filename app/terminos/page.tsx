@@ -1,75 +1,147 @@
-export default function TerminosPage() {
+import type { Metadata } from "next";
+import Link from "next/link";
+import {
+  FaArrowRight,
+  FaCalendarXmark,
+  FaClock,
+  FaHandHoldingHeart,
+  FaHouseCircleCheck,
+  FaMoneyCheckDollar,
+  FaShieldHeart,
+  FaWhatsapp,
+} from "react-icons/fa6";
+import { PageBody, PageHero } from "@/components/PageHeader";
+import Reveal, { RevealGroup, RevealItem } from "@/components/motion/Reveal";
+import { getSiteData } from "@/lib/catalog";
+import { whatsappLink } from "@/lib/site";
+
+export const metadata: Metadata = {
+  title: "Términos y condiciones",
+  description:
+    "Condiciones de reserva, pago, cancelación, duración del arriendo y responsabilidad por daños de Zona Creativa.",
+  alternates: { canonical: "/terminos" },
+};
+
+const TERMS = [
+  {
+    icon: FaMoneyCheckDollar,
+    color: "bg-emerald-100 text-emerald-600",
+    title: "Reserva y pago",
+    key: "10% de abono",
+    body: (
+      <>
+        Para reservar tu fecha, debes abonar el <b className="text-sun-600">10% del valor total</b> mediante transferencia. El saldo restante se
+        cancela el día del evento, durante la instalación de la plaza blanda.
+      </>
+    ),
+  },
+  {
+    icon: FaCalendarXmark,
+    color: "bg-sun-100 text-sun-600",
+    title: "Cambios o cancelaciones",
+    key: "7 días de aviso",
+    body: (
+      <>
+        Si necesitas cancelar, debes avisarnos con al menos <b>7 días de anticipación</b>. Pasado este plazo, podrás reprogramar tu reserva
+        (sujeto a disponibilidad), sin reembolso.
+      </>
+    ),
+  },
+  {
+    icon: FaClock,
+    color: "bg-brand-100 text-brand-700",
+    title: "Duración del arriendo",
+    key: "4 horas",
+    body: (
+      <>
+        El arriendo tiene una duración de <b>4 horas</b>, con retiro máximo a las <b>20:00 hrs</b>.
+      </>
+    ),
+  },
+  {
+    icon: FaShieldHeart,
+    color: "bg-pink-100 text-pink-600",
+    title: "Responsabilidad por daños",
+    key: "Buen uso",
+    body: (
+      <>
+        La persona que arrienda es responsable del buen uso de los servicios. En caso de daño, se aplicará un cobro del{" "}
+        <b className="text-red-600">20%</b> del valor de fábrica. Si el servicio queda inutilizable, se deberá cubrir el{" "}
+        <b className="text-red-600">100%</b> de su valor.
+      </>
+    ),
+  },
+];
+
+export default async function TerminosPage() {
+  const { contact } = await getSiteData();
   return (
-    <section
-      className="
-        flex justify-center px-4 sm:px-8
-        pt-32 sm:pt-36 md:pt-40 pb-16
-         bg-gradient-to-b  from-blue-800/95 via-blue-400/90 to-blue-100/85
-      "
-    >
-      <div
-        className="
-          max-w-3xl w-full
-          bg-white
-          rounded-3xl
-          shadow-lg
-          p-8 sm:p-12
-          border border-slate-200
-        "
-      >
-        <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-[#1E3A8A] mb-8">
-          Términos y Condiciones
-        </h1>
+    <>
+      <PageHero
+        eyebrow="Información"
+        title="Términos y condiciones"
+        subtitle="Todo lo que necesitas saber antes de reservar, explicado de forma simple y clara."
+      />
 
-        <div className="space-y-6 text-[#0F172A] leading-relaxed text-sm sm:text-base">
-          <div>
-            <h3 className="font-bold text-[#2563EB] mb-1">Reserva y pago</h3>
-            <p>
-              Para reservar tu fecha, debes abonar el{" "}
-              <b className="text-[#F59E0B]">10% del valor total</b> mediante
-              transferencia. El saldo restante se cancela el día del evento,
-              durante la instalación de la plaza blanda.
-            </p>
-          </div>
+      <PageBody>
+        <div className="mx-auto max-w-5xl">
+          <RevealGroup className="grid gap-5 md:grid-cols-2">
+            {TERMS.map(({ icon: Icon, color, title, key, body }, i) => (
+              <RevealItem
+                key={title}
+                className="group relative overflow-hidden rounded-3xl border border-slate-200/70 bg-white p-6 shadow-card transition-all duration-300 hover:-translate-y-1 hover:shadow-lift sm:p-7"
+              >
+                <span aria-hidden className="absolute top-5 right-6 font-display text-5xl font-extrabold text-slate-100 transition-colors group-hover:text-brand-50">
+                  0{i + 1}
+                </span>
+                <span className={`relative flex h-14 w-14 items-center justify-center rounded-2xl text-2xl transition-transform duration-300 group-hover:scale-110 ${color}`}>
+                  <Icon />
+                </span>
+                <h2 className="relative mt-5 text-2xl font-extrabold text-brand-900">{title}</h2>
+                <span className="relative mt-2 inline-block rounded-full bg-slate-100 px-3 py-1 text-xs font-bold tracking-wide text-slate-600 uppercase">
+                  {key}
+                </span>
+                <p className="relative mt-3 leading-relaxed text-slate-700">{body}</p>
+              </RevealItem>
+            ))}
+          </RevealGroup>
 
-          <div>
-            <h3 className="font-bold text-[#2563EB] mb-1">
-              Cambios o cancelaciones
-            </h3>
-            <p>
-              Si necesitas cancelar, debes avisarnos con al menos{" "}
-              <b>7 días de anticipación</b>. Pasado este plazo, podrás
-              reprogramar tu reserva (sujeto a disponibilidad), sin reembolso.
-            </p>
-          </div>
+          <Reveal className="mt-6 flex items-center justify-center gap-2 rounded-2xl bg-pink-50 px-5 py-4 text-center font-semibold text-pink-700 ring-1 ring-pink-100">
+            <FaHandHoldingHeart className="shrink-0 text-xl" /> Cuidemos juntos los servicios.
+          </Reveal>
 
-          <div>
-            <h3 className="font-bold text-[#2563EB] mb-1">
-              Duración del arriendo
-            </h3>
-            <p>
-              El arriendo tiene una duración de <b>4 horas</b>, con retiro
-              máximo a las <b>20:00 hrs</b>.
-            </p>
-          </div>
-
-          <div>
-            <h3 className="font-bold text-[#2563EB] mb-1">
-              Responsabilidad por daños
-            </h3>
-            <p>
-              La persona que arrienda es responsable del buen uso de los juegos.
-              En caso de daño, se aplicará un cobro del{" "}
-              <b className="text-[#DC2626]">20%</b> del valor de fábrica. Si el
-              juego queda inutilizable, se deberá cubrir el{" "}
-              <b className="text-[#DC2626]">100%</b> de su valor.
-            </p>
-            <p className="mt-2 text-[#475569]">
-              🤍 Cuidemos juntos los juegos.
-            </p>
-          </div>
+          <Reveal className="mt-10 grid gap-4 sm:grid-cols-2">
+            <Link
+              href="/condiciones"
+              className="group flex items-center gap-4 rounded-3xl border border-slate-200/70 bg-white p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-brand-50 text-xl text-brand-700">
+                <FaHouseCircleCheck />
+              </span>
+              <span className="flex-1">
+                <span className="block font-bold text-brand-900">Requisitos del espacio</span>
+                <span className="block text-sm text-slate-500">Revisa dónde se pueden instalar los servicios</span>
+              </span>
+              <FaArrowRight className="text-brand-400 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <a
+              href={whatsappLink("Hola, tengo una consulta sobre los términos de arriendo", contact.whatsappNumber)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 rounded-3xl border border-slate-200/70 bg-white p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift"
+            >
+              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-emerald-50 text-xl text-emerald-600">
+                <FaWhatsapp />
+              </span>
+              <span className="flex-1">
+                <span className="block font-bold text-brand-900">¿Te quedó alguna duda?</span>
+                <span className="block text-sm text-slate-500">Escríbenos por WhatsApp y te ayudamos</span>
+              </span>
+              <FaArrowRight className="text-brand-400 transition-transform group-hover:translate-x-1" />
+            </a>
+          </Reveal>
         </div>
-      </div>
-    </section>
+      </PageBody>
+    </>
   );
 }

@@ -1,86 +1,67 @@
 "use client";
 
-import { packs } from "@/data/packs";
 import PackCard from "@/components/PackCard";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Autoplay } from "swiper/modules";
+import { Pagination, Autoplay, A11y } from "swiper/modules";
 import Link from "next/link";
+import { FaArrowRight } from "react-icons/fa6";
+import SectionHeading from "@/components/SectionHeading";
+import type { CatalogPack, CatalogProduct } from "@/types/catalog";
+import type { MediaItem } from "@/types/media";
+import { coverFor, packProductImages } from "@/lib/media";
 
 import "swiper/css";
 import "swiper/css/pagination";
 
-export default function PacksSection() {
+export default function PacksSection({
+  packs,
+  products,
+  media,
+}: {
+  packs: CatalogPack[];
+  products: CatalogProduct[];
+  media: MediaItem[];
+}) {
+  if (!packs.length) return null;
   return (
-    <section id="packs" className="relative w-full scroll-mt-28 pb-5 sm:pb-10">
+    <section id="packs" className="relative w-full scroll-mt-28 py-14 sm:py-20">
       <div className="relative max-w-6xl mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-5 text-center text-blue-900">
-          Packs
-        </h2>
+        <SectionHeading eyebrow="Ahorra con packs" title="Packs con precio especial" subtitle="Combina servicios y ahorra en tu celebración." />
 
         <Swiper
-          modules={[Pagination, Autoplay]}
+          modules={[Pagination, Autoplay, A11y]}
           slidesPerView={1}
-          spaceBetween={16}
-          loop
+          spaceBetween={20}
+          rewind
           pagination={{ clickable: true }}
-          autoplay={{ delay: 2500, disableOnInteraction: false }}
+          autoplay={{ delay: 4200, disableOnInteraction: false, pauseOnMouseEnter: true }}
+          speed={650}
           breakpoints={{
-            640: { slidesPerView: 1 },
+            480: { slidesPerView: 1.5 },
             768: { slidesPerView: 2 },
             1024: { slidesPerView: 3 },
           }}
-          className="pb-10"
+          className="zc-swiper"
         >
           {packs.map((pack) => (
-            <SwiperSlide key={pack.id} className="flex justify-center">
-              <PackCard pack={pack} />
+            <SwiperSlide key={pack.id} className="h-auto! px-1 pt-3 pb-5">
+              <PackCard
+                pack={pack}
+                cover={coverFor(media, { type: "pack", id: pack.id })}
+                productImages={packProductImages(pack, products, media)}
+              />
             </SwiperSlide>
           ))}
         </Swiper>
 
-        <div className="mt-6 text-center">
-          <Link
-            href="/packs"
-            className="
-              inline-block
-              bg-blue-600 hover:bg-blue-700
-              text-white font-bold
-              text-sm sm:text-xs md:text-sm
-              py-2 px-5
-              rounded-full
-              transition-colors duration-300
-            "
-          >
-            Ver todos
+        <div className="mt-8 text-center">
+          <Link href="/packs" className="zc-btn zc-btn-white group text-sm">
+            Ver todos los packs
+            <FaArrowRight className="transition-transform group-hover:translate-x-1" />
           </Link>
         </div>
       </div>
 
-      <div className="mt-10 w-full border-t border-slate-300/60"></div>
-
-      <style jsx global>{`
-        .swiper-pagination {
-          position: relative !important;
-          margin-top: 20px;
-          display: flex;
-          justify-content: center;
-          gap: 8px;
-        }
-
-        .swiper-pagination-bullet {
-          width: 8px;
-          height: 8px;
-          background: #2563eb !important;
-          opacity: 0.6;
-          border-radius: 9999px;
-          transition: all 0.3s;
-        }
-
-        .swiper-pagination-bullet-active {
-          opacity: 1;
-          transform: scale(1.3);
-        }
-      `}</style>
     </section>
   );
 }
