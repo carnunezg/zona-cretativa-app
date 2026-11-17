@@ -11,6 +11,7 @@ import {
   FaCalendarDays,
   FaCheck,
   FaCircleCheck,
+  FaCircleInfo,
   FaClock,
   FaCopy,
   FaGift,
@@ -19,12 +20,11 @@ import {
   FaLocationDot,
   FaMapPin,
   FaMinus,
-  FaMoneyBillTransfer,
+  FaPaperPlane,
   FaPenToSquare,
   FaPhone,
   FaPlus,
   FaReceipt,
-  FaShieldHeart,
   FaTrashCan,
   FaTriangleExclamation,
   FaUser,
@@ -36,7 +36,7 @@ import type { MediaItem } from "@/types/media";
 import { coverFor } from "@/lib/media";
 import { clp, estimateTotal, isListed, packSelection, productPriceLabel, type Selection } from "@/lib/pricing";
 import { getSupabase } from "@/lib/supabase";
-import { BANK_TRANSFER, COMMITMENT_AMOUNT, whatsappLink } from "@/lib/site";
+import { COMMITMENT_AMOUNT, whatsappLink } from "@/lib/site";
 import { toneFor } from "@/lib/tones";
 
 const COMMUNES = [
@@ -49,6 +49,9 @@ const TIMES = Array.from({ length: 32 }, (_, i) => {
   const m = 8 * 60 + i * 30;
   return `${String(Math.floor(m / 60)).padStart(2, "0")}:${String(m % 60).padStart(2, "0")}`;
 });
+
+/** Duración máxima de los servicios de valor fijo (Pinta Caritas se cobra por hora y no tiene tope). */
+const MAX_HOURS = 4;
 
 const toMinutes = (t: string) => {
   const [h, m] = t.split(":").map(Number);
@@ -188,7 +191,6 @@ export default function BookingForm({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState<Done | null>(null);
-  const [reported, setReported] = useState(false);
 
   const estimate = useMemo(() => estimateTotal(products, packs, selection), [products, packs, selection]);
   const chosen = products.filter((p) => (selection[p.id] ?? 0) > 0);
@@ -197,10 +199,23 @@ export default function BookingForm({
   const minDate = chileDate(1);
   const maxDate = chileDate(365);
   const duration = durationLabel(start, end);
+  // El tope de 4 horas aplica si hay algún servicio de valor fijo (o aún no se elige ninguno).
+  const limited = chosen.length === 0 || chosen.some((p) => p.billingType !== "hour");
+  const overLimit = limited && toMinutes(end) - toMinutes(start) > MAX_HOURS * 60;
+
+  // Al cambiar el inicio, mantener el término dentro del rango permitido.
+  function changeStart(value: string) {
+    setStart(value);
+    const span = toMinutes(end) - toMinutes(value);
+    if (span <= 0 || (limited && span > MAX_HOURS * 60)) {
+      const target = toMinutes(value) + (limited ? MAX_HOURS * 60 : 4 * 60);
+      setEnd([...TIMES].reverse().find((t) => toMinutes(t) <= target && toMinutes(t) > toMinutes(value)) ?? TIMES[TIMES.length - 1]);
+    }
+  }
 
   // Avance del formulario (para los checks y la barra de progreso).
   const step1 = chosen.length > 0;
-  const step2 = !!date && !!duration;
+  const step2 = !!date && !!duration && !overLimit;
   const step3 = form.name.trim().length >= 2 && form.phone.trim().length >= 6 && form.address.trim().length >= 5 && form.commune.trim().length >= 2;
   const progress = [step1, step2, step3, accepted].filter(Boolean).length;
 
@@ -233,6 +248,7 @@ export default function BookingForm({
     if (!chosen.length) return setError("Elige al menos un servicio.");
     if (!date) return setError("Elige la fecha del evento.");
     if (end <= start) return setError("La hora de término debe ser posterior a la de inicio.");
+    if (overLimit) return setError(`Los servicios tienen una duración máxima de ${MAX_HOURS} horas. Ajusta el horario.`);
     if (!accepted) return setError("Debes aceptar los términos y condiciones.");
 
     const supabase = getSupabase();
@@ -264,7 +280,7 @@ export default function BookingForm({
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  /* ───────────── Reserva confirmada: pago del compromiso ───────────── */
+  /* ───────────── Solicitud recibida: la confirmamos por WhatsApp ───────────── */
   if (done) {
     const serviceList = chosen
       .map((p) => {
@@ -273,35 +289,32 @@ export default function BookingForm({
       })
       .join(", ");
     const message = [
-      "Hola Zona Creativa 👋 Acabo de reservar en la página web.",
+      "Hola Zona Creativa 👋 Acabo de enviar una solicitud de reserva desde la página web.",
       "",
       `*Código:* ${done.code}`,
       `*Nombre:* ${form.name.trim()}`,
       `*Fecha:* ${longDate(done.date)}, ${start} a ${end} hrs`,
       `*Servicios:* ${serviceList}`,
       `*Dirección:* ${form.address.trim()}, ${form.commune.trim()}`,
-      `*Total servicios:* ${clp(done.total)}`,
-      "",
-      `✅ Ya transferí los *${clp(COMMITMENT_AMOUNT)}* de compromiso. Te adjunto el comprobante.`,
     ].join("\n");
-    const rest = Math.max(0, done.total - COMMITMENT_AMOUNT);
-    const bankRows: [string, string][] = [
-      ["Nombre", BANK_TRANSFER.holder],
-      ["RUT", BANK_TRANSFER.rut],
-      ["Banco", BANK_TRANSFER.bank],
-      ["Tipo de cuenta", BANK_TRANSFER.accountType],
-      ["N° de cuenta", BANK_TRANSFER.accountNumber],
-      ["Correo", BANK_TRANSFER.email],
-      ["Monto", clp(COMMITMENT_AMOUNT)],
+    const nextSteps: { icon: IconType; title: string; text: React.ReactNode }[] = [
+      { icon: FaCircleCheck, title: "Solicitud recibida", text: "Tus datos ya llegaron a nuestro equipo." },
+      {
+        icon: FaWhatsapp,
+        title: "Te escribimos por WhatsApp",
+        text: (
+          <>
+            Revisamos la disponibilidad para tu fecha y te contactamos al{" "}
+            <b className="whitespace-nowrap text-brand-900">{form.phone.trim()}</b>.
+          </>
+        ),
+      },
+      {
+        icon: FaCalendarCheck,
+        title: "Confirmamos tu reserva",
+        text: "Coordinamos los detalles contigo. Tu reserva queda confirmada cuando te lo indiquemos por WhatsApp.",
+      },
     ];
-    const allData = bankRows.map(([k, v]) => `${k}: ${v}`).join("\n");
-
-    // Avisa al portal (si la función aún no existe, se ignora) y deja que el enlace abra WhatsApp.
-    const reportTransfer = () => {
-      setReported(true);
-      const supabase = getSupabase();
-      if (supabase) void supabase.rpc("report_web_transfer", { p_code: done.code, p_phone: form.phone });
-    };
 
     return (
       <motion.div
@@ -311,22 +324,30 @@ export default function BookingForm({
         className="mx-auto max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-slate-200/70"
       >
         {/* Encabezado */}
-        <div className="relative overflow-hidden bg-linear-to-br from-emerald-500 via-emerald-600 to-brand-700 px-6 pt-10 pb-16 text-center text-white">
+        <div className="relative overflow-hidden bg-linear-to-br from-brand-500 via-brand-600 to-brand-800 px-6 pt-10 pb-16 text-center text-white">
           <span aria-hidden className="animate-float absolute -top-10 -left-10 h-40 w-40 rounded-full bg-white/10" />
           <span aria-hidden className="animate-float-slow absolute -right-8 -bottom-12 h-44 w-44 rounded-full bg-sun-300/20" />
-          <span className="animate-pop relative mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-5xl text-emerald-500 shadow-xl">
-            <FaCircleCheck />
+          <span className="animate-pop relative mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white text-4xl text-brand-600 shadow-xl">
+            <FaPaperPlane />
           </span>
-          <h2 className="relative mt-5 text-3xl font-extrabold sm:text-4xl">¡Reserva confirmada!</h2>
-          <p className="relative mt-2 text-white/90">Gracias por preferir Zona Creativa 🎉</p>
+          <h2 className="relative mt-5 text-3xl font-extrabold sm:text-4xl">¡Recibimos tu solicitud!</h2>
+          <p className="relative mx-auto mt-2 max-w-md text-white/90">
+            Gracias, {form.name.trim().split(/\s+/)[0]}. Muy pronto te contactaremos para confirmar tu reserva 🎉
+          </p>
         </div>
 
         <div className="-mt-9 space-y-6 px-5 pb-8 sm:px-10">
           {/* Código y resumen */}
           <div className="relative rounded-2xl bg-white p-5 shadow-card ring-1 ring-slate-200/70">
-            <div className="text-center">
-              <p className="text-[11px] font-bold tracking-[0.14em] text-slate-400 uppercase">Tu código de reserva</p>
-              <p className="mt-1 font-mono text-2xl font-extrabold tracking-wide text-brand-800 sm:text-3xl sm:tracking-wider">{done.code}</p>
+            <div className="flex flex-col items-center text-center">
+              <p className="text-[11px] font-bold tracking-[0.14em] text-slate-400 uppercase">Código de tu solicitud</p>
+              <div className="mt-1 flex items-center gap-2">
+                <p className="font-mono text-xl font-extrabold whitespace-nowrap text-brand-800 min-[400px]:text-2xl sm:text-3xl sm:tracking-wider">{done.code}</p>
+                <CopyButton value={done.code} label="código" />
+              </div>
+              <span className="mt-2 inline-flex items-center gap-1.5 rounded-full bg-sun-100 px-3 py-1 text-xs font-bold text-sun-700 ring-1 ring-sun-200">
+                <FaHourglassHalf /> Pendiente de confirmación
+              </span>
             </div>
             <dl className="mt-4 grid gap-2 border-t border-dashed border-slate-200 pt-4 text-sm sm:grid-cols-3">
               <div className="flex items-center gap-2 sm:flex-col sm:text-center">
@@ -346,77 +367,45 @@ export default function BookingForm({
             </dl>
           </div>
 
-          {/* Paso de pago */}
-          <section className="overflow-hidden rounded-2xl ring-2 ring-sun-300">
-            <div className="flex items-start gap-3 bg-linear-to-r from-sun-100 via-sun-50 to-white px-5 py-4">
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sun-400 text-xl text-brand-950 shadow-sm">
-                <FaMoneyBillTransfer />
-              </span>
-              <div>
-                <p className="text-xs font-extrabold tracking-[0.12em] text-sun-600 uppercase">Último paso</p>
-                <h3 className="text-lg leading-tight font-extrabold text-brand-900 sm:text-xl">
-                  Transfiere {clp(COMMITMENT_AMOUNT)} de compromiso
-                </h3>
-                <p className="mt-1 text-sm text-slate-600">
-                  Es un valor simbólico que confirma el compromiso de ambas partes. El resto
-                  {rest > 0 ? ` (${clp(rest)})` : ""} y el traslado se pagan el día del evento.
-                </p>
-              </div>
-            </div>
-
-            <div className="bg-white p-5">
-              <dl className="divide-y divide-slate-100 rounded-xl ring-1 ring-slate-200">
-                {bankRows.map(([label, value]) => (
-                  <div key={label} className="flex items-center gap-3 px-4 py-2.5">
-                    <div className="min-w-0 flex-1 sm:flex sm:items-center sm:gap-3">
-                      <dt className="text-[11px] font-bold tracking-wide text-slate-400 uppercase sm:w-28 sm:shrink-0 sm:text-xs">{label}</dt>
-                      <dd
-                        className={`min-w-0 text-sm font-semibold [overflow-wrap:anywhere] sm:truncate ${label === "Monto" ? "text-lg font-extrabold text-emerald-600" : "text-ink"}`}
-                      >
-                        {value}
-                      </dd>
-                    </div>
-                    <CopyButton value={label === "Monto" ? String(COMMITMENT_AMOUNT) : value} label={label} />
+          {/* ¿Qué sigue? */}
+          <section className="rounded-2xl bg-brand-50/60 p-5 ring-1 ring-brand-100 sm:p-6">
+            <h3 className="text-lg font-extrabold text-brand-900">¿Qué sigue?</h3>
+            <ol className="mt-4 space-y-4">
+              {nextSteps.map((s, i) => (
+                <li key={s.title} className="flex gap-3">
+                  <span
+                    className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-lg shadow-sm ${
+                      i === 0 ? "bg-emerald-500 text-white" : i === 1 ? "bg-[#25D366] text-white" : "bg-white text-brand-600 ring-1 ring-brand-200"
+                    }`}
+                  >
+                    <s.icon />
+                  </span>
+                  <div className="min-w-0">
+                    <p className="font-bold text-brand-900">
+                      {i + 1}. {s.title}
+                    </p>
+                    <p className="text-sm leading-6 text-slate-600">{s.text}</p>
                   </div>
-                ))}
-              </dl>
-              <div className="mt-3 flex justify-end">
-                <CopyButton value={allData} label="todos los datos" wide />
-              </div>
-            </div>
+                </li>
+              ))}
+            </ol>
           </section>
 
-          {/* Aviso por WhatsApp */}
-          <AnimatePresence mode="wait">
-            {reported ? (
-              <motion.div
-                key="ok"
-                initial={reduce ? false : { opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                className="rounded-2xl bg-emerald-50 p-5 text-center ring-1 ring-emerald-200"
-              >
-                <FaCircleCheck className="mx-auto text-3xl text-emerald-500" />
-                <p className="mt-2 font-extrabold text-emerald-800">¡Gracias! Ya le avisamos a Zona Creativa</p>
-                <p className="mt-1 text-sm text-emerald-700">
-                  Revisaremos la transferencia y te escribiremos por WhatsApp para coordinar el traslado. Si no se abrió WhatsApp, usa el botón
-                  de abajo.
-                </p>
-              </motion.div>
-            ) : (
-              <motion.p key="hint" className="text-center text-sm text-slate-500">
-                Cuando hayas transferido, toca el botón y envíanos el comprobante por WhatsApp.
-              </motion.p>
-            )}
-          </AnimatePresence>
+          <p className="flex items-start gap-2 rounded-xl bg-sun-50 px-4 py-3 text-sm text-slate-600 ring-1 ring-sun-200">
+            <FaCircleInfo className="mt-0.5 shrink-0 text-sun-500" />
+            <span>
+              <b className="text-brand-900">Aún no necesitas pagar nada.</b> Cuando confirmemos tu fecha te enviaremos por WhatsApp los
+              datos para el compromiso de {clp(COMMITMENT_AMOUNT)}; el resto se paga el día del evento.
+            </span>
+          </p>
 
           <a
             href={whatsappLink(message, contact.whatsappNumber)}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={reportTransfer}
             className="zc-btn zc-btn-green zc-shine w-full py-4 text-base"
           >
-            <FaWhatsapp className="text-xl" /> {reported ? "Enviar comprobante nuevamente" : "Ya transferí · Enviar comprobante"}
+            <FaWhatsapp className="text-xl" /> ¿Tienes dudas? Escríbenos por WhatsApp
           </a>
 
           <Link href="/" className="flex items-center justify-center gap-2 text-sm font-semibold text-brand-600 hover:text-brand-800">
@@ -588,7 +577,7 @@ export default function BookingForm({
               <input type="date" required min={minDate} max={maxDate} value={date} onChange={(e) => setDate(e.target.value)} className={input} />
             </Field>
             <Field label="Inicio" icon={FaClock}>
-              <select value={start} onChange={(e) => setStart(e.target.value)} className={input}>
+              <select value={start} onChange={(e) => changeStart(e.target.value)} className={input}>
                 {TIMES.map((t) => (
                   <option key={t}>{t}</option>
                 ))}
@@ -596,9 +585,15 @@ export default function BookingForm({
             </Field>
             <Field label="Término" icon={FaClock}>
               <select value={end} onChange={(e) => setEnd(e.target.value)} className={input}>
-                {TIMES.map((t) => (
-                  <option key={t}>{t}</option>
-                ))}
+                {TIMES.filter((t) => toMinutes(t) > toMinutes(start) || t === end).map((t) => {
+                  const tooLong = limited && toMinutes(t) - toMinutes(start) > MAX_HOURS * 60;
+                  return (
+                    <option key={t} value={t} disabled={tooLong && t !== end}>
+                      {t}
+                      {tooLong ? ` (máx. ${MAX_HOURS} h)` : ""}
+                    </option>
+                  );
+                })}
               </select>
             </Field>
           </div>
@@ -608,7 +603,11 @@ export default function BookingForm({
                 <FaCalendarCheck className="text-brand-500" /> {longDate(date)}
               </span>
             )}
-            {duration ? (
+            {duration && overLimit ? (
+              <span className="inline-flex items-center gap-2 rounded-full bg-red-50 px-3.5 py-1.5 text-sm font-semibold text-red-600">
+                <FaTriangleExclamation /> Máximo {MAX_HOURS} horas de servicio
+              </span>
+            ) : duration ? (
               <span className="inline-flex items-center gap-2 rounded-full bg-sun-50 px-3.5 py-1.5 text-sm font-semibold text-sun-600">
                 <FaHourglassHalf /> {duration} de diversión
               </span>
@@ -618,6 +617,17 @@ export default function BookingForm({
               </span>
             )}
           </div>
+          <p className="mt-3 flex items-start gap-2 rounded-xl bg-brand-50/70 px-3.5 py-2.5 text-xs leading-5 text-slate-600 ring-1 ring-brand-100">
+            <FaClock className="mt-0.5 shrink-0 text-brand-500" />
+            {limited ? (
+              <span>
+                Los servicios tienen una duración de <b className="text-brand-900">hasta {MAX_HOURS} horas</b>.
+                {chosen.some((p) => p.billingType === "hour") && " Pinta Caritas se cobra por hora: elige las horas en el paso 1."}
+              </span>
+            ) : (
+              <span>Pinta Caritas se cobra por hora: elige las horas que necesitas en el paso 1.</span>
+            )}
+          </p>
           <p className="mt-3 text-xs text-slate-500">Las reservas en línea se hacen con al menos un día de anticipación. Para hoy, escríbenos por WhatsApp.</p>
         </section>
 
@@ -791,11 +801,11 @@ export default function BookingForm({
             <button type="submit" disabled={busy} className="zc-btn zc-btn-green zc-shine group mt-4 w-full py-3.5 text-base disabled:opacity-60">
               {busy ? (
                 <>
-                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" /> Confirmando…
+                  <span className="h-5 w-5 animate-spin rounded-full border-2 border-white/40 border-t-white" /> Enviando…
                 </>
               ) : (
                 <>
-                  <FaCalendarCheck className="text-lg" /> Confirmar reserva
+                  <FaPaperPlane className="text-lg" /> Enviar solicitud de reserva
                   <FaArrowRight className="transition-transform group-hover:translate-x-1" />
                 </>
               )}
@@ -803,10 +813,10 @@ export default function BookingForm({
 
             <ul className="mt-4 space-y-1.5 text-xs text-slate-500 [@media(max-height:760px)]:lg:hidden">
               <li className="flex items-center gap-2">
-                <FaCircleCheck className="text-emerald-500" /> Confirmación inmediata con tu código
+                <FaWhatsapp className="text-emerald-500" /> Te confirmamos la reserva por WhatsApp
               </li>
               <li className="flex items-center gap-2">
-                <FaShieldHeart className="text-pink-500" /> Reservas con solo $1.000; el resto, el día del evento
+                <FaCircleCheck className="text-pink-500" /> No pagas nada hasta que confirmemos tu fecha
               </li>
             </ul>
 

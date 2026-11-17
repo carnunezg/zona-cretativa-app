@@ -33,7 +33,7 @@ export default async function ProductosPage() {
         highlights={[
           { icon: FaPuzzlePiece, label: `${products.length} servicios disponibles` },
           ...(from ? [{ icon: FaTag, label: `Desde ${clp(from)}` }] : []),
-          { icon: FaBolt, label: "Reserva al instante" },
+          { icon: FaBolt, label: "Reserva en línea" },
         ]}
       />
 

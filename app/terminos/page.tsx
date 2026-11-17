@@ -30,7 +30,7 @@ const TERMS = [
     key: "$1.000 de compromiso",
     body: (
       <>
-        Para reservar tu fecha, transfiere <b className="text-sun-600">$1.000 como compromiso</b> de ambas partes. El resto del valor
+        Cuando te confirmemos por WhatsApp la disponibilidad de tu fecha, transfiere <b className="text-sun-600">$1.000 como compromiso</b> de ambas partes. El resto del valor
         se paga el día del evento, durante la instalación de los servicios.
       </>
     ),

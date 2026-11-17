@@ -64,7 +64,7 @@ interface Props {
 }
 
 const TRUST = [
-  { icon: FaCircleCheck, label: "Confirmación inmediata", color: "text-emerald-500" },
+  { icon: FaCircleCheck, label: "Te confirmamos por WhatsApp", color: "text-emerald-500" },
   { icon: FaTruckFast, label: "Llevamos, instalamos y retiramos", color: "text-brand-500" },
   { icon: FaShieldHeart, label: "Reserva con solo $1.000", color: "text-pink-500" },
 ];
