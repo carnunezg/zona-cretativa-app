@@ -81,7 +81,7 @@ export default function ItemDetail({
 
             <span className="inline-flex items-center gap-2 bg-green-100 text-green-700 text-xs sm:text-sm font-semibold px-3 sm:px-4 py-1 rounded-full mb-4">
               <FaCircleCheck className="text-sm sm:text-base" />
-              Disponible para arriendo
+              Disponible para reservar
             </span>
 
             {description && (

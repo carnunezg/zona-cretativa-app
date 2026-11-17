@@ -59,7 +59,7 @@ export default async function PackDetallePage({ params }: Props) {
       features={pack.features}
       facts={[
         { icon: FaBoxOpen, label: "Incluye", value: pack.includes },
-        { icon: FaClock, label: "Tiempo de arriendo", value: pack.duration },
+        { icon: FaClock, label: "Duración", value: pack.duration },
         { icon: FaChild, label: "Edad recomendada", value: pack.age },
       ]}
       reserveHref={`/reservar?pack=${pack.slug}`}

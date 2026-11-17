@@ -28,12 +28,12 @@ const baloo = localFont({
 export const metadata: Metadata = {
   metadataBase: SITE_URL ? new URL(SITE_URL) : undefined,
   title: {
-    default: `${SITE_NAME} | Arriendo de servicios infantiles e inflables`,
+    default: `${SITE_NAME} | Servicios infantiles para cumpleaños y celebraciones`,
     template: `%s | ${SITE_NAME}`,
   },
   description: SITE_DESCRIPTION,
   keywords: [
-    "arriendo de servicios infantiles",
+    "servicios infantiles para cumpleaños",
     "arriendo de inflables",
     "castillo inflable",
     "piscina de pelotas",
@@ -48,7 +48,7 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_CL",
     siteName: SITE_NAME,
-    title: `${SITE_NAME} | Arriendo de servicios infantiles e inflables`,
+    title: `${SITE_NAME} | Servicios infantiles para cumpleaños y celebraciones`,
     description: SITE_DESCRIPTION,
     images: [{ url: "/images/pack 2 piscina.webp", alt: "Servicios infantiles Zona Creativa" }],
   },

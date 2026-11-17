@@ -7,7 +7,7 @@ import type { SiteContact, SiteHero } from "@/types/catalog";
 export const SITE_NAME = "Zona Creativa";
 
 export const SITE_DESCRIPTION =
-  "Arriendo de servicios infantiles para cumpleaños y celebraciones: castillos inflables, cama elástica, piscina de pelotas, resbalín, ponys saltarines y más.";
+  "Servicios infantiles para cumpleaños y celebraciones: castillos inflables, cama elástica, piscina de pelotas, resbalín, ponys saltarines y más.";
 
 // URL pública del sitio (para SEO, sitemap y Open Graph). Se define en el
 // entorno de despliegue: NEXT_PUBLIC_SITE_URL=https://tu-dominio.cl
@@ -19,7 +19,7 @@ export const SITE_URL =
 export const digitsOnly = (v: string) => (v ?? "").replace(/\D/g, "");
 
 export const DEFAULT_HERO: SiteHero = {
-  title: "Arriendo de servicios infantiles para cumpleaños y celebraciones",
+  title: "Servicios infantiles para cumpleaños y celebraciones",
   subtitle: "Castillos inflables, cama elástica, piscina de pelotas, resbalín, ponys saltarines y mucho más para que los niños vivan un día inolvidable.",
 };
 

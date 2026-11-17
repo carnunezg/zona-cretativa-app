@@ -108,7 +108,7 @@ export default function ProductCard({ product, cover }: Props) {
           <div className="flex flex-wrap items-end justify-between gap-x-2 gap-y-3 border-t border-dashed border-slate-200 pt-4">
             <div className="leading-none">
               <span className="block text-[11px] font-bold tracking-[0.12em] whitespace-nowrap text-slate-400 uppercase">
-                {included ? "Sin costo" : hourly ? "Por hora" : "Arriendo"}
+                {included ? "Sin costo" : hourly ? "Por hora" : "Valor"}
               </span>
               <span className="mt-1.5 block text-[1.45rem] font-extrabold whitespace-nowrap text-brand-800">
                 {included ? "Incluido" : amount ? clp(amount) : "Consultar"}

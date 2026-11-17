@@ -13,7 +13,7 @@ import { clp } from "@/lib/pricing";
 export const metadata: Metadata = {
   title: "Servicios",
   description:
-    "Arriendo de castillos inflables, cama elástica, piscina de pelotas, resbalín, ponys saltarines y más para cumpleaños infantiles. Revisa medidas, edades y precios.",
+    "Castillos inflables, cama elástica, piscina de pelotas, resbalín, ponys saltarines, pinta caritas y más para cumpleaños infantiles. Revisa medidas, edades y precios.",
   alternates: { canonical: "/productos" },
 };
 
@@ -56,7 +56,7 @@ export default async function ProductosPage() {
                 <FaGift />
               </span>
               <span className="flex-1">
-                <span className="block text-2xl font-extrabold text-brand-900">¿Vas a arrendar varios servicios?</span>
+                <span className="block text-2xl font-extrabold text-brand-900">¿Vas a contratar varios servicios?</span>
                 <span className="mt-1 block text-slate-600">
                   Con nuestros packs pagas menos{bestSaving > 0 ? ` y ahorras hasta ${clp(bestSaving)}` : ""}.
                 </span>

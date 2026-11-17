@@ -35,7 +35,7 @@ export default function Footer({ contact }: { contact: SiteContact }) {
               <Image src="/images/logo-zona-creativa-nav.webp" alt="Zona Creativa" width={520} height={347} className="h-20 w-auto" />
             </Link>
             <p className="mt-3 max-w-xs text-sm leading-relaxed text-white/70">
-              Arriendo de servicios infantiles para cumpleaños y celebraciones. Creamos espacios para disfrutar.
+              Servicios infantiles para cumpleaños y celebraciones. Creamos espacios para disfrutar.
             </p>
             <div className="mt-5 flex gap-2.5">
               {socials.map(({ href, label, icon: Icon }) => (

@@ -23,9 +23,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { products } = await getSiteData();
   const product = products.find((p) => p.slug === slug);
   if (!product) return {};
-  const description = product.description ?? `Arriendo de ${product.name} para cumpleaños y celebraciones infantiles.`;
+  const description = product.description ?? `${product.name} para cumpleaños y celebraciones infantiles.`;
   return {
-    title: `${product.name} en arriendo`,
+    title: `${product.name} para cumpleaños y celebraciones`,
     description,
     alternates: { canonical: `/productos/${product.slug}` },
     openGraph: { title: product.name, description, images: [product.image] },
@@ -51,7 +51,7 @@ export default async function ProductoDetallePage({ params }: Props) {
       description={product.description}
       features={product.features}
       facts={[
-        { icon: FaClock, label: "Tiempo de arriendo", value: product.duration },
+        { icon: FaClock, label: "Duración", value: product.duration },
         { icon: FaChild, label: "Edad recomendada", value: product.age },
         { icon: FaRulerCombined, label: "Medidas", value: product.dimensions },
       ]}

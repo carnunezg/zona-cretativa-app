@@ -18,7 +18,7 @@ import { whatsappLink } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Términos y condiciones",
   description:
-    "Condiciones de reserva, pago, cancelación, duración del arriendo y responsabilidad por daños de Zona Creativa.",
+    "Condiciones de reserva, pago, cancelación, duración del servicio y responsabilidad por daños de Zona Creativa.",
   alternates: { canonical: "/terminos" },
 };
 
@@ -50,11 +50,11 @@ const TERMS = [
   {
     icon: FaClock,
     color: "bg-brand-100 text-brand-700",
-    title: "Duración del arriendo",
+    title: "Duración del servicio",
     key: "4 horas",
     body: (
       <>
-        El arriendo tiene una duración de <b>4 horas</b>, con retiro máximo a las <b>20:00 hrs</b>.
+        El servicio tiene una duración de <b>4 horas</b>, con retiro máximo a las <b>20:00 hrs</b>.
       </>
     ),
   },
@@ -65,7 +65,7 @@ const TERMS = [
     key: "Buen uso",
     body: (
       <>
-        La persona que arrienda es responsable del buen uso de los servicios. En caso de daño, se aplicará un cobro del{" "}
+        La persona que contrata es responsable del buen uso de los servicios. En caso de daño, se aplicará un cobro del{" "}
         <b className="text-red-600">20%</b> del valor de fábrica. Si el servicio queda inutilizable, se deberá cubrir el{" "}
         <b className="text-red-600">100%</b> de su valor.
       </>
@@ -125,7 +125,7 @@ export default async function TerminosPage() {
               <FaArrowRight className="text-brand-400 transition-transform group-hover:translate-x-1" />
             </Link>
             <a
-              href={whatsappLink("Hola, tengo una consulta sobre los términos de arriendo", contact.whatsappNumber)}
+              href={whatsappLink("Hola, tengo una consulta sobre los términos del servicio", contact.whatsappNumber)}
               target="_blank"
               rel="noopener noreferrer"
               className="group flex items-center gap-4 rounded-3xl border border-slate-200/70 bg-white p-5 shadow-card transition-all hover:-translate-y-0.5 hover:shadow-lift"
