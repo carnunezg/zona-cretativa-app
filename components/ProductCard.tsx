@@ -4,6 +4,7 @@ import { FaArrowRight, FaCalendarCheck, FaChild, FaClock, FaGift, FaHourglassHal
 import type { CatalogProduct } from "@/types/catalog";
 import type { MediaItem } from "@/types/media";
 import { clp } from "@/lib/pricing";
+import FullPhoto from "@/components/media/FullPhoto";
 import { toneFor } from "@/lib/tones";
 
 interface Props {
@@ -26,13 +27,9 @@ export default function ProductCard({ product, cover }: Props) {
       {/* Imagen sobre fondo de color con círculo decorativo */}
       <div className={`relative aspect-[5/4] w-full overflow-hidden bg-linear-to-br ${tone.bg}`}>
         {cover ? (
-          <Image
-            src={cover.url}
-            alt={cover.title || product.name}
-            fill
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.08]"
-          />
+          <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.05]">
+            <FullPhoto src={cover.url} alt={cover.title || product.name} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+          </div>
         ) : (
           <>
             <span

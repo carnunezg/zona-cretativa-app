@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import { FaChevronLeft, FaChevronRight, FaMagnifyingGlassPlus } from "react-icons/fa6";
 import type { MediaItem } from "@/types/media";
 import Lightbox, { type LightboxSlide } from "./Lightbox";
+import FullPhoto from "./FullPhoto";
 
 interface Props {
   /** Fotos y videos de este servicio o pack (vienen del portal). */
@@ -101,15 +102,20 @@ export default function ItemGallery({
           aria-label="Ver imagen en grande"
           className="absolute inset-0 cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-yellow-300 rounded-3xl"
         >
-          <Image
-            key={current.src}
-            src={current.src}
-            alt={current.alt}
-            fill
-            priority={index === 0}
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={current.fit === "cover" ? "object-cover" : "object-contain p-8 drop-shadow-[0_22px_26px_rgba(15,26,58,0.25)]"}
-          />
+          {current.fit === "cover" ? (
+            // Fotos subidas: completas, sin recortar (verticales u horizontales).
+            <FullPhoto key={current.src} src={current.src} alt={current.alt} priority={index === 0} sizes="(max-width: 768px) 100vw, 50vw" />
+          ) : (
+            <Image
+              key={current.src}
+              src={current.src}
+              alt={current.alt}
+              fill
+              priority={index === 0}
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className="object-contain p-8 drop-shadow-[0_22px_26px_rgba(15,26,58,0.25)]"
+            />
+          )}
           <span className="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white/90 text-[#1E3A8A] flex items-center justify-center shadow-md opacity-90 group-hover:scale-110 transition">
             <FaMagnifyingGlassPlus />
           </span>

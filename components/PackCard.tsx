@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import { FaArrowRight, FaCalendarCheck, FaGift } from "react-icons/fa6";
 import type { CatalogPack } from "@/types/catalog";
@@ -6,6 +5,7 @@ import type { MediaItem } from "@/types/media";
 import { clp } from "@/lib/pricing";
 import { toneFor } from "@/lib/tones";
 import PackImage from "@/components/PackImage";
+import FullPhoto from "@/components/media/FullPhoto";
 import PackIncludes from "@/components/PackIncludes";
 
 interface Props {
@@ -29,13 +29,7 @@ export default function PackCard({ pack, cover, productImages }: Props) {
       <div className={`relative aspect-[5/4] w-full overflow-hidden bg-linear-to-br ${tone.bg}`}>
         <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.06]">
           {cover ? (
-            <Image
-              src={cover.url}
-              alt={cover.title || pack.title}
-              fill
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-              className="object-cover"
-            />
+            <FullPhoto src={cover.url} alt={cover.title || pack.title} sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
           ) : (
             <PackImage image={pack.image} productImages={productImages} alt={pack.title} />
           )}
