@@ -11,14 +11,14 @@ export default function PackImage({
   sizes = "(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw",
 }: {
   image: string | null;
-  productImages: string[];
+  productImages: (string | null)[];
   alt: string;
   sizes?: string;
 }) {
   if (image) {
     return <Image src={image} alt={alt} fill sizes={sizes} className="object-cover" />;
   }
-  const tiles = [...new Set(productImages)].slice(0, 4);
+  const tiles = [...new Set(productImages.filter((x): x is string => Boolean(x)))].slice(0, 4);
   const cols = tiles.length <= 1 ? "grid-cols-1" : "grid-cols-2";
   return (
     <div role="img" aria-label={alt} className={`grid h-full w-full ${cols} gap-1 bg-gradient-to-br from-blue-50 to-yellow-50 p-1.5`}>

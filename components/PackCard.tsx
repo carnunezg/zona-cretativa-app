@@ -1,18 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
-import { FaArrowRight, FaCalendarCheck, FaCheck, FaGift } from "react-icons/fa6";
+import { FaArrowRight, FaCalendarCheck, FaGift } from "react-icons/fa6";
 import type { CatalogPack } from "@/types/catalog";
 import type { MediaItem } from "@/types/media";
 import { clp } from "@/lib/pricing";
 import { toneFor } from "@/lib/tones";
 import PackImage from "@/components/PackImage";
+import PackIncludes from "@/components/PackIncludes";
 
 interface Props {
   pack: CatalogPack;
   /** Portada elegida en el portal. */
   cover?: MediaItem;
-  /** Imágenes de los servicios del pack (si no tiene foto propia, se muestran juntas). */
-  productImages: string[];
+  /** Imagen de cada servicio del pack, en el orden de `pack.slots` (mosaico y lista «Incluye»). */
+  productImages: (string | null)[];
 }
 
 export default function PackCard({ pack, cover, productImages }: Props) {
@@ -72,18 +73,7 @@ export default function PackCard({ pack, cover, productImages }: Props) {
         </h3>
 
         <p className="mt-3 text-[11px] font-bold tracking-[0.12em] text-slate-400 uppercase">Incluye</p>
-        <ul className="mt-2 flex flex-wrap gap-1.5">
-          {pack.slots.map((s) => (
-            <li
-              key={s.label}
-              className="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-2.5 py-1 text-[13px] font-medium text-slate-700 ring-1 ring-slate-200/80"
-            >
-              <FaCheck className={`text-[10px] ${tone.accent}`} />
-              {s.quantity > 1 ? `${s.quantity} × ` : ""}
-              {s.label}
-            </li>
-          ))}
-        </ul>
+        <PackIncludes slots={pack.slots} images={productImages} className="mt-2" />
 
         <div className="mt-auto pt-5">
           <div className="flex flex-wrap items-end justify-between gap-x-2 gap-y-3 border-t border-dashed border-slate-200 pt-4">

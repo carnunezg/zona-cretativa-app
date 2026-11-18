@@ -51,14 +51,17 @@ export function parseVideoUrl(raw: string): EmbedInfo | null {
   return null;
 }
 
-/** Imagen de cada servicio de un pack (portada subida o imagen por defecto), para el mosaico. */
+/**
+ * Imagen de cada componente de un pack (portada subida o imagen por defecto),
+ * en el mismo orden que `pack.slots` (null si el servicio no está publicado).
+ */
 export function packProductImages(
   pack: { slots: { productIds: string[] }[] },
   products: { id: string; image: string }[],
   items: MediaItem[],
-) {
-  return pack.slots
-    .map((s) => products.find((p) => s.productIds.includes(p.id)))
-    .filter((p): p is { id: string; image: string } => Boolean(p))
-    .map((p) => coverFor(items, { type: "product", id: p.id })?.url ?? p.image);
+): (string | null)[] {
+  return pack.slots.map((s) => {
+    const p = products.find((x) => s.productIds.includes(x.id));
+    return p ? (coverFor(items, { type: "product", id: p.id })?.url ?? p.image) : null;
+  });
 }

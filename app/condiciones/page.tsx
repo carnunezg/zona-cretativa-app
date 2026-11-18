@@ -4,6 +4,7 @@ import {
   FaArrowRight,
   FaBroom,
   FaCircleCheck,
+  FaDropletSlash,
   FaFileContract,
   FaHouse,
   FaLayerGroup,
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
 const SURFACES = [
   { icon: FaLayerGroup, label: "Piso flotante", color: "bg-sun-100 text-sun-600" },
   { icon: FaTableCellsLarge, label: "Cerámica", color: "bg-brand-100 text-brand-700" },
-  { icon: FaSeedling, label: "Pasto parejo", color: "bg-emerald-100 text-emerald-600" },
+  { icon: FaSeedling, label: "Pasto parejo y seco", color: "bg-emerald-100 text-emerald-600" },
   { icon: FaRulerCombined, label: "Áreas niveladas y sin piedras", color: "bg-pink-100 text-pink-600" },
 ];
 
@@ -36,6 +37,7 @@ const CHECKLIST = [
   "El espacio está limpio, seco y es seguro para la instalación y el uso por parte de los niños.",
   "Cuentas con el espacio suficiente para la correcta instalación.",
   "La superficie es una de las recomendadas: pareja, nivelada y sin piedras.",
+  "El pasto y toda la superficie están completamente secos: sin lluvia, riego ni rocío.",
 ];
 
 export default async function CondicionesEspacioPage() {
@@ -82,6 +84,20 @@ export default async function CondicionesEspacioPage() {
               ))}
             </RevealGroup>
           </div>
+
+          <Reveal className="flex flex-col items-center gap-5 rounded-3xl border-2 border-sky-200 bg-linear-to-br from-sky-50 to-white p-6 text-center shadow-card sm:flex-row sm:p-8 sm:text-left">
+            <span className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-sky-500 text-3xl text-white shadow-md">
+              <FaDropletSlash />
+            </span>
+            <div>
+              <h2 className="text-xl font-extrabold text-brand-900 sm:text-2xl">Todo debe estar completamente seco</h2>
+              <p className="mt-2 leading-relaxed text-slate-700">
+                El <b className="text-brand-800">pasto</b>, el piso y toda la zona de instalación deben estar <b className="text-brand-800">secos</b>:
+                no riegues el día del evento ni la noche anterior y evita el agua acumulada. Si la superficie está mojada o húmeda, por la
+                seguridad de los niños no podremos instalar los servicios.
+              </p>
+            </div>
+          </Reveal>
 
           <Reveal className="rounded-3xl bg-linear-to-br from-brand-700 to-brand-500 p-6 text-white shadow-lift sm:p-8">
             <h2 className="text-2xl font-extrabold sm:text-3xl">Antes del evento, verifica que:</h2>

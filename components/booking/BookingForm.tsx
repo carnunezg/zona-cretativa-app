@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
@@ -33,7 +33,8 @@ import {
 import type { IconType } from "react-icons";
 import type { CatalogPack, CatalogProduct, SiteContact } from "@/types/catalog";
 import type { MediaItem } from "@/types/media";
-import { coverFor } from "@/lib/media";
+import { coverFor, packProductImages } from "@/lib/media";
+import PackIncludes from "@/components/PackIncludes";
 import { clp, estimateTotal, isListed, packSelection, productPriceLabel, type Selection } from "@/lib/pricing";
 import { getSupabase } from "@/lib/supabase";
 import { COMMITMENT_AMOUNT, whatsappLink } from "@/lib/site";
@@ -191,6 +192,14 @@ export default function BookingForm({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [done, setDone] = useState<Done | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  // Al enviar, llevar la vista directo al resultado (no al comienzo de la página).
+  useEffect(() => {
+    if (!done) return;
+    const t = window.setTimeout(() => resultRef.current?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" }), 60);
+    return () => window.clearTimeout(t);
+  }, [done, reduce]);
 
   const estimate = useMemo(() => estimateTotal(products, packs, selection), [products, packs, selection]);
   const chosen = products.filter((p) => (selection[p.id] ?? 0) > 0);
@@ -277,7 +286,6 @@ export default function BookingForm({
     }
     const r = data as { code: string; total: number; event_date: string };
     setDone({ code: r.code, total: r.total, date: r.event_date });
-    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
   /* ───────────── Solicitud recibida: la confirmamos por WhatsApp ───────────── */
@@ -318,10 +326,11 @@ export default function BookingForm({
 
     return (
       <motion.div
+        ref={resultRef}
         initial={reduce ? false : { opacity: 0, y: 24, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        className="mx-auto max-w-2xl overflow-hidden rounded-[2rem] bg-white shadow-lift ring-1 ring-slate-200/70"
+        className="mx-auto max-w-2xl scroll-mt-24 overflow-hidden sm:scroll-mt-28 rounded-[2rem] bg-white shadow-lift ring-1 ring-slate-200/70"
       >
         {/* Encabezado */}
         <div className="relative overflow-hidden bg-linear-to-br from-brand-500 via-brand-600 to-brand-800 px-6 pt-10 pb-16 text-center text-white">
@@ -456,14 +465,15 @@ export default function BookingForm({
                       <button
                         type="button"
                         onClick={() => addPack(p)}
-                        className="group relative flex h-full w-52 flex-col rounded-2xl bg-linear-to-br from-brand-50 to-white p-3.5 text-left ring-1 ring-brand-100 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card hover:ring-2 hover:ring-brand-300"
+                        className="group relative flex h-full w-60 flex-col rounded-2xl bg-linear-to-br from-brand-50 to-white p-3.5 text-left ring-1 ring-brand-100 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-card hover:ring-2 hover:ring-brand-300"
                       >
                         <span className="flex items-center justify-between gap-2">
                           <span className="rounded-full bg-brand-800 px-2 py-0.5 text-[10px] font-extrabold tracking-wide text-white uppercase">Pack {p.number}</span>
                           {pct > 0 && <span className="rounded-full bg-pink-600 px-2 py-0.5 text-[10px] font-extrabold text-white">-{pct}%</span>}
                         </span>
                         <span className="mt-2 block text-sm leading-tight font-extrabold text-brand-900">{p.name}</span>
-                        <span className="mt-1 line-clamp-2 text-xs leading-snug text-slate-500">{p.includes}</span>
+                        <span className="sr-only">Incluye: {p.includes}</span>
+                        <PackIncludes slots={p.slots} images={packProductImages(p, products, media)} variant="tiles" className="mt-2.5" />
                         <span className="mt-auto flex items-end justify-between gap-2 pt-3">
                           <span className="text-lg font-extrabold text-brand-800">{clp(p.price)}</span>
                           <span className="flex h-8 w-8 items-center justify-center rounded-full bg-brand-700 text-white transition-transform duration-300 group-hover:scale-110 group-hover:rotate-90">
