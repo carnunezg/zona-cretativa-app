@@ -149,7 +149,7 @@ export default function ItemGallery({
         </div>
       )}
 
-      <div className="mt-4 flex gap-2 overflow-x-auto pb-2 justify-start sm:justify-center">
+      <div className="mt-3 -mx-1.5 flex gap-2 overflow-x-auto px-2.5 pt-2 pb-3 justify-start sm:justify-center">
         {items.map((it, i) => (
           <button
             key={(it.type === "image" ? it.slide.src : it.key) + i}
