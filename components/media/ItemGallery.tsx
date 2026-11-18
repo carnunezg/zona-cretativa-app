@@ -20,11 +20,14 @@ interface Props {
   toneBlob?: string;
 }
 
+/** Elemento de la galería: una foto, o el mosaico con los servicios del pack. */
+type GalleryItem = { type: "image"; slide: LightboxSlide } | { type: "node"; key: string };
+
 /**
  * Galería del detalle de producto/pack.
- * - Sin fotos subidas: muestra la imagen original tal como antes.
- * - Con fotos: la portada elegida en el panel pasa a ser la principal y la
- *   imagen original queda disponible dentro de la galería.
+ * - Siempre empieza con la imagen original del servicio o, en los packs, con el
+ *   mosaico de los servicios que incluye (así el cliente ve qué trae).
+ * - Después siguen las fotos subidas desde el portal (primero la portada).
  */
 export default function ItemGallery({
   media,
@@ -38,29 +41,32 @@ export default function ItemGallery({
   const [active, setActive] = useState(0);
   const [lightbox, setLightbox] = useState<number | null>(null);
 
-  const slides = useMemo<LightboxSlide[]>(() => {
+  const items = useMemo<GalleryItem[]>(() => {
     const photos = media.filter((m) => m.kind === "image");
-    const toSlide = (m: (typeof photos)[number]): LightboxSlide => ({
-      src: m.url,
-      alt: m.title || alt,
-      title: m.title,
-      description: m.description,
-      fit: "cover",
+    const toItem = (m: (typeof photos)[number]): GalleryItem => ({
+      type: "image",
+      slide: { src: m.url, alt: m.title || alt, title: m.title, description: m.description, fit: "cover" },
     });
     const cover = photos.find((m) => m.is_cover);
-    const rest = photos.filter((m) => m !== cover).map(toSlide);
-    if (!fallbackImage) return cover ? [toSlide(cover), ...rest] : rest;
-    const original: LightboxSlide = { src: fallbackImage, alt, fit: "contain" };
-    return cover ? [toSlide(cover), ...rest, original] : [original, ...rest];
-  }, [media, fallbackImage, alt]);
+    const uploaded = [...(cover ? [cover] : []), ...photos.filter((m) => m !== cover)].map(toItem);
+    const first: GalleryItem[] = fallbackImage
+      ? [{ type: "image", slide: { src: fallbackImage, alt, fit: "contain" } }]
+      : fallbackNode
+        ? [{ type: "node", key: "mosaico" }]
+        : [];
+    return [...first, ...uploaded];
+  }, [media, fallbackImage, fallbackNode, alt]);
 
-  // Sin fotos ni imagen por defecto: mosaico del pack.
-  if (slides.length === 0) {
+  // Solo las fotos se abren en grande (el mosaico no).
+  const slides = useMemo(() => items.flatMap((it) => (it.type === "image" ? [it.slide] : [])), [items]);
+
+  // Sin fotos subidas: mosaico del pack, tal como antes.
+  if (items.length === 0 || (items.length === 1 && items[0].type === "node")) {
     return <div className={`${frame} bg-white`}>{fallbackNode}</div>;
   }
 
-  // Sin contenido adicional: mismo aspecto que la versión original.
-  if (slides.length === 1 && fallbackImage && slides[0].src === fallbackImage) {
+  // Sin fotos subidas: imagen original con el mismo aspecto de siempre.
+  if (items.length === 1 && fallbackImage) {
     return (
       <div className={frame}>
         <span aria-hidden className={`absolute top-1/2 left-1/2 h-[74%] w-[74%] -translate-x-1/2 -translate-y-1/2 rounded-full ${toneBlob}`} />
@@ -79,16 +85,19 @@ export default function ItemGallery({
     );
   }
 
-  const index = Math.min(active, slides.length - 1);
-  const current = slides[index];
-  const go = (d: number) => setActive((index + d + slides.length) % slides.length);
+  const index = Math.min(active, items.length - 1);
+  const item = items[index];
+  const current = item.type === "image" ? item.slide : null;
+  const go = (d: number) => setActive((index + d + items.length) % items.length);
 
   return (
     <div className="w-full">
-      <div className={`group ${frame}`}>
+      <div className={`group ${frame} ${current ? "" : "bg-white"}`}>
+        {!current && <div className="absolute inset-0">{fallbackNode}</div>}
+        {current && (
         <button
           type="button"
-          onClick={() => setLightbox(index)}
+          onClick={() => setLightbox(slides.indexOf(current))}
           aria-label="Ver imagen en grande"
           className="absolute inset-0 cursor-zoom-in focus:outline-none focus-visible:ring-4 focus-visible:ring-yellow-300 rounded-3xl"
         >
@@ -105,6 +114,7 @@ export default function ItemGallery({
             <FaMagnifyingGlassPlus />
           </span>
         </button>
+        )}
 
         <button
           type="button"
@@ -124,7 +134,7 @@ export default function ItemGallery({
         </button>
       </div>
 
-      {(current.title || current.description) && (
+      {current && (current.title || current.description) && (
         <div className="mt-3 text-center text-slate-700">
           {current.title && <p className="font-bold">{current.title}</p>}
           {current.description && (
@@ -134,12 +144,12 @@ export default function ItemGallery({
       )}
 
       <div className="mt-4 flex gap-2 overflow-x-auto pb-2 justify-start sm:justify-center">
-        {slides.map((s, i) => (
+        {items.map((it, i) => (
           <button
-            key={s.src + i}
+            key={(it.type === "image" ? it.slide.src : it.key) + i}
             type="button"
             onClick={() => setActive(i)}
-            aria-label={`Ver foto ${i + 1}`}
+            aria-label={it.type === "node" ? "Ver servicios incluidos" : `Ver foto ${i + 1}`}
             aria-current={i === index}
             className={`relative shrink-0 w-20 h-16 sm:w-24 sm:h-20 rounded-xl overflow-hidden bg-white transition ${
               i === index
@@ -147,13 +157,17 @@ export default function ItemGallery({
                 : "ring-1 ring-slate-200 opacity-75 hover:opacity-100"
             }`}
           >
-            <Image
-              src={s.src}
-              alt=""
-              fill
-              sizes="96px"
-              className={s.fit === "cover" ? "object-cover" : "object-contain p-1"}
-            />
+            {it.type === "node" ? (
+              <span className="pointer-events-none absolute inset-0">{fallbackNode}</span>
+            ) : (
+              <Image
+                src={it.slide.src}
+                alt=""
+                fill
+                sizes="96px"
+                className={it.slide.fit === "cover" ? "object-cover" : "object-contain p-1"}
+              />
+            )}
           </button>
         ))}
       </div>
