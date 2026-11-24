@@ -9,6 +9,7 @@ import {
   FaArrowRight,
   FaCalendarCheck,
   FaCalendarDays,
+  FaCalendarXmark,
   FaCheck,
   FaCircleCheck,
   FaCircleInfo,
@@ -636,9 +637,25 @@ export default function BookingForm({
             </Field>
           </div>
           {dateProblem && (
-            <p role="alert" className="mt-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
-              <FaTriangleExclamation className="mt-0.5 shrink-0" /> {dateProblem}
-            </p>
+            <div role="alert" className="mt-4 overflow-hidden rounded-2xl border border-red-200 bg-linear-to-br from-red-50 to-white">
+              <div className="flex items-start gap-3 p-3.5 sm:p-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-red-500 text-white shadow-sm shadow-red-500/25">
+                  <FaCalendarXmark />
+                </span>
+                <div className="min-w-0">
+                  <p className="text-sm font-extrabold text-red-800">{fullDayBlocked ? "Fecha no disponible" : "Horario no disponible"}</p>
+                  <p className="mt-0.5 text-sm leading-6 text-slate-700">{dateProblem}</p>
+                </div>
+              </div>
+              <a
+                href={whatsappLink(`Hola, quiero consultar disponibilidad para el ${longDate(date).toLowerCase()}`, contact.whatsappNumber)}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center gap-2 border-t border-red-100 bg-white/70 px-4 py-2.5 text-sm font-bold text-emerald-700 transition hover:bg-emerald-50"
+              >
+                <FaWhatsapp className="text-base" /> Consultar por WhatsApp
+              </a>
+            </div>
           )}
           {!dateProblem && dayBlocks.length > 0 && (
             <p className="mt-4 flex items-start gap-2 rounded-xl border border-sun-200 bg-sun-50 p-3 text-sm text-slate-700">
