@@ -45,6 +45,9 @@ const COMMUNES = [
   "Penco", "Tomé", "Coronel", "Lota", "Hualqui",
 ];
 
+/** Fecha u horario bloqueado (de la función pública web_blocked_dates; sin motivo). */
+type Block = { start_date: string; end_date: string; start_time: string | null; end_time: string | null };
+
 /** Horarios cada 30 minutos (08:00 a 23:30). */
 const TIMES = Array.from({ length: 32 }, (_, i) => {
   const m = 8 * 60 + i * 30;
@@ -185,6 +188,19 @@ export default function BookingForm({
     return product ? { [product.id]: product.billingType === "hour" ? 2 : 1 } : {};
   });
   const [date, setDate] = useState("");
+  // Fechas bloqueadas por Zona Creativa (la base también las rechaza al reservar).
+  const [blocked, setBlocked] = useState<Block[]>([]);
+  useEffect(() => {
+    const supabase = getSupabase();
+    if (!supabase) return;
+    let active = true;
+    supabase.rpc("web_blocked_dates").then(({ data, error }) => {
+      if (active && !error && Array.isArray(data)) setBlocked(data as Block[]);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
   const [start, setStart] = useState("15:00");
   const [end, setEnd] = useState("19:00");
   const [form, setForm] = useState({ name: "", phone: "", address: "", commune: "", reference: "", notes: "", website: "" });
@@ -224,7 +240,18 @@ export default function BookingForm({
 
   // Avance del formulario (para los checks y la barra de progreso).
   const step1 = chosen.length > 0;
-  const step2 = !!date && !!duration && !overLimit;
+  // Bloqueos del día elegido: de día completo, o solo un horario que se cruza con el evento.
+  const dayBlocks = date ? blocked.filter((b) => date >= b.start_date && date <= b.end_date) : [];
+  const fullDayBlocked = dayBlocks.some((b) => !b.start_time);
+  const hourClash = fullDayBlocked
+    ? null
+    : (dayBlocks.find((b) => b.start_time && start < b.end_time!.slice(0, 5) && end > b.start_time.slice(0, 5)) ?? null);
+  const dateProblem = fullDayBlocked
+    ? `Lo sentimos, el ${longDate(date).toLowerCase()} no tenemos disponibilidad. Elige otra fecha o escríbenos por WhatsApp.`
+    : hourClash
+      ? `Ese día no tenemos disponibilidad entre las ${hourClash.start_time!.slice(0, 5)} y las ${hourClash.end_time!.slice(0, 5)}. Elige otro horario.`
+      : "";
+  const step2 = !!date && !!duration && !overLimit && !dateProblem;
   const step3 = form.name.trim().length >= 2 && form.phone.trim().length >= 6 && form.address.trim().length >= 5 && form.commune.trim().length >= 2;
   const progress = [step1, step2, step3, accepted].filter(Boolean).length;
 
@@ -256,6 +283,7 @@ export default function BookingForm({
     setError("");
     if (!chosen.length) return setError("Elige al menos un servicio.");
     if (!date) return setError("Elige la fecha del evento.");
+    if (dateProblem) return setError(dateProblem);
     if (end <= start) return setError("La hora de término debe ser posterior a la de inicio.");
     if (overLimit) return setError(`Los servicios tienen una duración máxima de ${MAX_HOURS} horas. Ajusta el horario.`);
     if (!accepted) return setError("Debes aceptar los términos y condiciones.");
@@ -607,9 +635,28 @@ export default function BookingForm({
               </select>
             </Field>
           </div>
+          {dateProblem && (
+            <p role="alert" className="mt-4 flex items-start gap-2 rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-700">
+              <FaTriangleExclamation className="mt-0.5 shrink-0" /> {dateProblem}
+            </p>
+          )}
+          {!dateProblem && dayBlocks.length > 0 && (
+            <p className="mt-4 flex items-start gap-2 rounded-xl border border-sun-200 bg-sun-50 p-3 text-sm text-slate-700">
+              <FaClock className="mt-0.5 shrink-0 text-sun-500" />
+              <span>
+                Ese día no atendemos{" "}
+                {dayBlocks.map((b, i) => (
+                  <b key={i}>
+                    {i > 0 ? " ni " : ""}entre las {b.start_time!.slice(0, 5)} y las {b.end_time!.slice(0, 5)}
+                  </b>
+                ))}
+                . Tu horario sí está disponible.
+              </span>
+            </p>
+          )}
           <div className="mt-4 flex flex-wrap gap-2">
             {date && (
-              <span className="inline-flex items-center gap-2 rounded-full bg-brand-50 px-3.5 py-1.5 text-sm font-semibold text-brand-800">
+              <span className={`inline-flex items-center gap-2 rounded-full px-3.5 py-1.5 text-sm font-semibold ${fullDayBlocked ? "bg-red-50 text-red-700 line-through" : "bg-brand-50 text-brand-800"}`}>
                 <FaCalendarCheck className="text-brand-500" /> {longDate(date)}
               </span>
             )}
